@@ -3,20 +3,39 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Where is Blake?</title>
+<title>Where’s Blake?</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Overpass:wght@800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;700;800&display=swap">
 <style>
-  /* Day: highway-sign yellow with a black legend.
-     Night: asphalt with the legend lit up in sign yellow. */
+  /* Road-sign yellow by day, asphalt by night. */
   :root {
     --sign-yellow: #FFCD00;
-    --legend-black: #000000;
+    --black: #000000;
     --asphalt: #26282B;
 
-    --ground: var(--sign-yellow);
-    --legend: var(--legend-black);
+    --page: var(--sign-yellow);
+    --ink: var(--black);
+    --ink-soft: #594800;
+    --rule: rgba(0, 0, 0, 0.2);
+    --live: #D62718;
+
+    --land: #ECEEE4;
+    --street: #FFFFFF;
+    --road: #FFCD00;
+    --road-edge: #C79800;
+    --campus: #CDE1BC;
+    --hills: #D3D6BE;
+    --hills-line: #A3A886;
+    --map-ink: #000000;
+    --route: #000000;
+    --spot-fill: #FFFFFF;
+    --spot-ring: #000000;
+    --shadow: rgba(0, 0, 0, 0.28);
+    --frame: #000000;
+
+    --font: "Overpass", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --emoji: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
 
     color-scheme: light;
     box-sizing: border-box;
@@ -26,56 +45,865 @@
 
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --ground: var(--asphalt);
-      --legend: var(--sign-yellow);
+      --page: var(--asphalt);
+      --ink: var(--sign-yellow);
+      --ink-soft: #BE9C0D;
+      --rule: rgba(255, 205, 0, 0.22);
+      --live: #FF5A4A;
+      --land: #303338;
+      --street: #3E4249;
+      --road: #E3B600;
+      --road-edge: #6F5900;
+      --campus: #2D4333;
+      --hills: #393D33;
+      --hills-line: #5E634B;
+      --map-ink: #ECEAE2;
+      --route: #FFFFFF;
+      --spot-fill: #26282B;
+      --spot-ring: #FFCD00;
+      --shadow: rgba(0, 0, 0, 0.55);
+      --frame: #FFCD00;
       color-scheme: dark;
     }
   }
 
   :root[data-theme="dark"] {
-    --ground: var(--asphalt);
-    --legend: var(--sign-yellow);
+    --page: var(--asphalt);
+    --ink: var(--sign-yellow);
+    --ink-soft: #BE9C0D;
+    --rule: rgba(255, 205, 0, 0.22);
+    --live: #FF5A4A;
+    --land: #303338;
+    --street: #3E4249;
+    --road: #E3B600;
+    --road-edge: #6F5900;
+    --campus: #2D4333;
+    --hills: #393D33;
+    --hills-line: #5E634B;
+    --map-ink: #ECEAE2;
+    --route: #FFFFFF;
+    --spot-fill: #26282B;
+    --spot-ring: #FFCD00;
+    --shadow: rgba(0, 0, 0, 0.55);
+    --frame: #FFCD00;
     color-scheme: dark;
   }
 
-  *, *::before, *::after {
-    box-sizing: inherit;
-  }
+  *, *::before, *::after { box-sizing: inherit; }
 
   html {
-    height: 100%;
-    background: var(--ground);
+    min-height: 100%;
+    background: var(--page);
     scroll-padding-top: env(safe-area-inset-top, 0px);
   }
 
   body {
-    height: 100%;
     margin: 0;
-    display: grid;
-    place-items: center;
-    background: var(--ground);
-    color: var(--legend);
+    min-height: 100%;
+    background: var(--page);
+    color: var(--ink);
+    font-family: var(--font);
+    -webkit-font-smoothing: antialiased;
   }
 
-  h1 {
+  .page {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding-top: clamp(16px, 4vw, 44px);
+    padding-bottom: clamp(28px, 6vw, 60px);
+    padding-left: max(clamp(16px, 4vw, 44px), env(safe-area-inset-left, 0px));
+    padding-right: max(clamp(16px, 4vw, 44px), env(safe-area-inset-right, 0px));
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "bar" "map" "readout" "log";
+    row-gap: clamp(16px, 3.2vw, 28px);
+  }
+
+  /* Header */
+  .bar {
+    grid-area: bar;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .wordmark {
     margin: 0;
-    padding-inline: max(6vw, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
-    font-family: "Overpass", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 1.2rem;
     font-weight: 800;
-    font-size: min(15vw, 28vh);
-    line-height: 0.98;
     letter-spacing: -0.01em;
-    text-align: center;
+  }
+  .live {
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+  .dot {
+    position: relative;
+    width: 0.6em;
+    height: 0.6em;
+    border-radius: 50%;
+    background: var(--live);
+  }
+  .dot::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--live);
+    animation: ping 1.6s ease-out infinite;
+  }
+  @keyframes ping {
+    from { transform: scale(1); opacity: 0.55; }
+    to { transform: scale(2.8); opacity: 0; }
+  }
+
+  /* Map */
+  .map {
+    grid-area: map;
+    margin: 0;
+    border: 3px solid var(--frame);
+    border-radius: 18px;
+    overflow: hidden;
+    background: var(--land);
+  }
+  .map svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    font-family: var(--font);
+  }
+  .land { fill: var(--land); }
+  .st { stroke: var(--street); stroke-width: 2.4px; }
+  .st-major { stroke-width: 4.4px; }
+  .road-edge { stroke: var(--road-edge); stroke-width: 8.6px; stroke-linecap: round; }
+  .road { stroke: var(--road); stroke-width: 6px; stroke-linecap: round; }
+  .campus { fill: var(--campus); stroke: var(--campus); stroke-width: 14px; stroke-linejoin: round; }
+  .hills { fill: var(--hills); }
+  .peak { fill: none; stroke: var(--hills-line); stroke-width: 2px; stroke-linecap: round; stroke-linejoin: round; }
+  .lbl {
+    fill: var(--map-ink);
+    font-size: 12.5px;
+    font-weight: 700;
+    paint-order: stroke;
+    stroke: var(--land);
+    stroke-width: 4px;
+    stroke-linejoin: round;
+  }
+  .lbl-soft { font-weight: 400; fill-opacity: 0.8; }
+  .lbl-place { font-size: 14.5px; font-weight: 800; }
+  .lbl-area { font-size: 16px; font-weight: 800; letter-spacing: 0.06em; fill-opacity: 0.42; stroke: none; }
+  .lbl-north { font-size: 12px; font-weight: 800; }
+  .north { fill: var(--map-ink); }
+  .spot-ring { fill: var(--spot-fill); stroke: var(--spot-ring); stroke-width: 2.5px; }
+  .spot-dot { fill: var(--spot-ring); }
+  .route {
+    fill: none;
+    stroke: var(--route);
+    stroke-width: 3.2px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 0.01 7.5;
+  }
+  .shadow { fill: var(--shadow); }
+  .emoji { font-family: var(--emoji); }
+  .bubble-box { fill: #FFFFFF; stroke: #000000; stroke-width: 1.6px; stroke-linejoin: round; }
+
+  /* Status */
+  .readout { grid-area: readout; }
+  .status {
+    margin: 0;
+    min-height: 2.08em;
+    font-size: clamp(1.85rem, 1.05rem + 2.4vw, 3rem);
+    font-weight: 800;
+    line-height: 1.04;
+    letter-spacing: -0.012em;
     text-wrap: balance;
   }
+  .stats {
+    margin: clamp(14px, 2.4vw, 22px) 0 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 20px;
+  }
+  .stats .wide { grid-column: 1 / -1; }
+  .stats dt {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--ink-soft);
+  }
+  .stats dd {
+    margin: 0.2em 0 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
 
-  /* Keep each phrase together so the line break always lands between them. */
-  h1 span {
-    white-space: nowrap;
+  /* Sightings */
+  .log { grid-area: log; }
+  .log h2 {
+    margin: 0 0 6px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--ink-soft);
+  }
+  .log ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .log li {
+    display: grid;
+    grid-template-columns: 7.4em minmax(0, 1fr);
+    gap: 12px;
+    padding: 9px 0;
+    border-top: 1px solid var(--rule);
+    font-size: 0.98rem;
+  }
+  .log li:last-child { border-bottom: 1px solid var(--rule); }
+  .log time {
+    color: var(--ink-soft);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (min-width: 880px) {
+    .page {
+      grid-template-columns: minmax(300px, 1fr) minmax(0, 1.35fr);
+      grid-template-rows: auto auto 1fr;
+      grid-template-areas:
+        "bar map"
+        "readout map"
+        "log map";
+      column-gap: clamp(32px, 4vw, 60px);
+      align-items: start;
+    }
+    .map {
+      width: min(100%, calc((100vh - 64px) * var(--map-aspect, 0.94)));
+      justify-self: end;
+    }
+    .status { min-height: 3.12em; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dot::after { animation: none; opacity: 0; }
   }
 </style>
 </head>
 <body>
-  <h1><span>Blake is</span> <span>at his desk</span></h1>
+<main class="page">
+  <header class="bar">
+    <h1 class="wordmark">Where’s Blake?</h1>
+    <p class="live"><span class="dot" aria-hidden="true"></span>Live</p>
+  </header>
+
+  <figure class="map">
+    <svg id="map" viewBox="0 0 470 500" role="img" aria-labelledby="map-title" xmlns="http://www.w3.org/2000/svg">
+      <title id="map-title">Map of Logan, Utah, showing where Blake supposedly is</title>
+    </svg>
+  </figure>
+
+  <section class="readout" aria-label="Blake’s status">
+    <p class="status" id="status" aria-live="polite">Finding Blake…</p>
+    <noscript><p>Blake can’t be tracked without JavaScript.</p></noscript>
+    <dl class="stats">
+      <div class="wide"><dt id="k0">Currently</dt><dd id="v0">…</dd></div>
+      <div><dt id="k1">Here since</dt><dd id="v1">…</dd></div>
+      <div><dt id="k2">Accuracy</dt><dd id="v2">…</dd></div>
+    </dl>
+  </section>
+
+  <section class="log" aria-labelledby="log-title">
+    <h2 id="log-title">Recent sightings</h2>
+    <ol id="log"></ol>
+  </section>
+</main>
+
+<script>
+(() => {
+  "use strict";
+
+  /* ---------- Places ----------
+     To add a spot, copy one of these blocks. north/east are Logan grid numbers:
+     820 N 1200 E is north: 820, east: 1200. South and west are negative,
+     so 880 S Main St is north: -880, east: 0. "here" is how the line
+     "Blake is …" finishes while he's at that spot. */
+  const LOCATIONS = [
+    {
+      name: "The office",
+      phrase: "the office",
+      address: "820 N 1200 E, Logan, UT 84322",
+      north: 820,
+      east: 1200,
+      icon: "🎫",
+      labelSide: "left",
+      here: ["at the office", "in the office", "back at the office", "lurking outside the office", "definitely at the office", "probably at the office", "allegedly at the office"],
+      activities: [
+        "Turning it off and on again",
+        "Closing tickets",
+        "Resetting someone’s password",
+        "On hold with Microsoft",
+        "Reopening the same ticket",
+        "Hunting for a USB-C dongle"
+      ]
+    },
+    {
+      name: "Royal Express",
+      phrase: "Royal Express",
+      address: "880 S Main St #138, Logan, UT 84321",
+      north: -880,
+      east: 0,
+      icon: "🥡",
+      labelSide: "right",
+      here: ["in front of Royal Express", "inside Royal Express", "lurking outside Royal Express", "definitely at Royal Express", "probably at Royal Express"],
+      activities: [
+        "Ordering orange chicken",
+        "Asking for extra sauce packets",
+        "Waiting on egg rolls",
+        "Debating chow mein vs. fried rice",
+        "Reading his fortune cookie"
+      ]
+    }
+  ];
+
+  const SLOT_MS = 26000;          // each visitor's timeline is cut into 26-second chunks
+  const MILES_PER_BLOCK = 1 / 8;  // close enough for a fake tracker
+  const S = 20;                   // map units per city block
+  const HILLS_X = 15.8;           // the foothills start around 1600 E
+
+  const RUN_VERBS = ["sprinting to", "booking it to", "hustling over to", "running to", "racing to"];
+  const ACCURACY = ["± 6 ft", "± 15 ft", "± 40 ft", "± 0.3 mi", "± 2 mi", "± 3 mi", "Somewhere in Cache Valley"];
+  const RUNNING = "🏃‍♂️";
+  const STANDING = "🧍‍♂️";
+
+  const PLACES = LOCATIONS.map(l => Object.assign({ here: [`at ${l.phrase}`] }, l, { x: l.east / 100, y: l.north / 100 }));
+
+  /* ---------- Map frame, in city blocks ---------- */
+  const xs = PLACES.map(p => p.x);
+  const ys = PLACES.map(p => p.y);
+  const B = {
+    minX: Math.floor(Math.min(0, ...xs) - 5),
+    maxX: Math.max(12, ...xs) + 6.5,
+    minY: Math.floor(Math.min(...ys) - 3.5),
+    maxY: Math.ceil(Math.max(...ys) + 3.5)
+  };
+  const W = (B.maxX - B.minX) * S;
+  const H = (B.maxY - B.minY) * S;
+  const px = x => (x - B.minX) * S;
+  const py = y => (B.maxY - y) * S;
+
+  /* ---------- Every visitor gets their own Blake ---------- */
+  function freshSeed() {
+    try { return crypto.getRandomValues(new Uint32Array(1))[0] >>> 0; }
+    catch (e) { return Math.floor(Math.random() * 4294967296) >>> 0; }
+  }
+  function visitorSeed() {
+    try {
+      const saved = localStorage.getItem("wheres-blake-seed");
+      if (saved && /^\d+$/.test(saved)) return Number(saved) >>> 0;
+      const seed = freshSeed();
+      localStorage.setItem("wheres-blake-seed", String(seed));
+      return seed;
+    } catch (e) {
+      return freshSeed();
+    }
+  }
+  const SEED = visitorSeed();
+  const PHASE = SEED % SLOT_MS;
+
+  function mix(a, b) {
+    let h = (a ^ Math.imul(b ^ 0x9e3779b9, 0x85ebca6b)) >>> 0;
+    h = Math.imul(h ^ (h >>> 16), 0x7feb352d);
+    h = Math.imul(h ^ (h >>> 15), 0x846ca68b);
+    return (h ^ (h >>> 16)) >>> 0;
+  }
+  function rng(seed) {
+    let t = seed >>> 0;
+    return () => {
+      t = (t + 0x6d2b79f5) >>> 0;
+      let r = Math.imul(t ^ (t >>> 15), 1 | t);
+      r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r;
+      return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  const lerp = (a, b, u) => a + (b - a) * u;
+  const pick = (r, list) => list[Math.floor(r() * list.length)];
+
+  /* ---------- Routes along the street grid ---------- */
+  const near = (a, b) => Math.abs(a - b) < 1e-9;
+  const isInt = v => near(v, Math.round(v));
+  function range(a, b) {
+    const out = [];
+    for (let i = a; i <= b; i++) out.push(i);
+    return out;
+  }
+  function sample(list, n, r) {
+    const pool = list.slice();
+    const out = [];
+    while (out.length < n && pool.length) out.push(pool.splice(Math.floor(r() * pool.length), 1)[0]);
+    return out;
+  }
+  function dedupe(pts) {
+    const out = [];
+    for (const p of pts) {
+      const q = out[out.length - 1];
+      if (!q || !near(p[0], q[0]) || !near(p[1], q[1])) out.push(p);
+    }
+    return out;
+  }
+  // A spot that isn't on a north–south street walks over to the nearest one first.
+  function onStreet(p) {
+    return isInt(p.x) ? [] : [[Math.round(p.x), p.y]];
+  }
+
+  function buildRoute(a, b, r, scenic) {
+    const head = onStreet(a);
+    const tail = onStreet(b);
+    const [x0, y0] = head.length ? head[0] : [a.x, a.y];
+    const [x1, y1] = tail.length ? tail[0] : [b.x, b.y];
+    const pts = [[a.x, a.y], ...head];
+    if (x0 !== x1 || scenic) {
+      const lo = Math.min(y0, y1);
+      const hi = Math.max(y0, y1);
+      let rows = range(Math.ceil(lo), Math.floor(hi));
+      if (!rows.length) rows = [r() < 0.5 ? Math.floor(lo) : Math.ceil(hi)];
+      const cols = range(Math.min(x0, x1) + 1, Math.max(x0, x1) - 1);
+      const turns = Math.max(1, Math.min(1 + Math.floor(r() * 3), rows.length + (scenic ? 1 : 0), cols.length + 1));
+      let hy;
+      if (scenic) {
+        const extra = 2 + Math.floor(r() * 2);
+        let over = r() < 0.5 ? Math.floor(hi) + extra : Math.ceil(lo) - extra;
+        over = Math.max(B.minY + 1, Math.min(B.maxY - 1, over));
+        hy = [over].concat(sample(rows, turns - 1, r));
+      } else {
+        hy = sample(rows, turns, r);
+      }
+      const dy = Math.sign(y1 - y0) || 1;
+      const dx = Math.sign(x1 - x0) || 1;
+      hy.sort((p, q) => (p - y0) * dy - (q - y0) * dy);
+      const vx = sample(cols, hy.length - 1, r).sort((p, q) => (p - x0) * dx - (q - x0) * dx);
+      let cx = x0;
+      hy.forEach((row, i) => {
+        pts.push([cx, row]);
+        cx = i < vx.length ? vx[i] : x1;
+        pts.push([cx, row]);
+      });
+    }
+    pts.push([x1, y1], [b.x, b.y]);
+    return dedupe(pts);
+  }
+
+  function buildLaps(p, r) {
+    const head = onStreet(p);
+    const [x0, y0] = head.length ? head[0] : [p.x, p.y];
+    let side = r() < 0.5 ? 1 : -1;
+    if (x0 + side > HILLS_X - 1) side = -1;
+    if (x0 + side < B.minX + 1) side = 1;
+    const below = Math.floor(y0);
+    const above = below + 1;
+    const loop = [[x0, above], [x0 + side, above], [x0 + side, below], [x0, below], [x0, y0]];
+    const laps = 2 + Math.floor(r() * 2);
+    let pts = [[p.x, p.y], ...head, [x0, y0]];
+    for (let i = 0; i < laps; i++) pts = pts.concat(loop);
+    pts = pts.concat(head.slice().reverse(), [[p.x, p.y]]);
+    return { route: dedupe(pts), laps };
+  }
+
+  function measure(route) {
+    const cum = [0];
+    for (let i = 1; i < route.length; i++) {
+      cum.push(cum[i - 1] + Math.hypot(route[i][0] - route[i - 1][0], route[i][1] - route[i - 1][1]));
+    }
+    return cum;
+  }
+  function pointAt(route, cum, d) {
+    const total = cum[cum.length - 1];
+    d = Math.max(0, Math.min(total, d));
+    let i = 1;
+    while (i < cum.length - 1 && cum[i] < d) i++;
+    const seg = cum[i] - cum[i - 1] || 1;
+    const u = (d - cum[i - 1]) / seg;
+    const [ax, ay] = route[i - 1];
+    const [bx, by] = route[i];
+    return { x: ax + (bx - ax) * u, y: ay + (by - ay) * u, dx: bx - ax };
+  }
+  function slicePath(route, cum, d) {
+    const out = [route[0]];
+    for (let i = 1; i < route.length; i++) {
+      if (cum[i] < d) {
+        out.push(route[i]);
+      } else {
+        const p = pointAt(route, cum, d);
+        out.push([p.x, p.y]);
+        break;
+      }
+    }
+    return dedupe(out);
+  }
+
+  /* ---------- Blake's timeline ----------
+     Where he is at each chunk boundary is picked at random; whatever happens
+     inside a chunk is worked out from that. Same visitor, same Blake, even
+     after a refresh. */
+  const plans = new Map();
+  const slotOf = t => Math.floor((t + PHASE) / SLOT_MS);
+  const slotStart = k => k * SLOT_MS - PHASE;
+  const spotAt = k => Math.floor(rng(mix(SEED ^ 0x5bd1e995, k))() * PLACES.length);
+
+  function plan(k) {
+    if (plans.has(k)) return plans.get(k);
+    if (plans.size > 600) plans.clear();
+    const r = rng(mix(SEED, k));
+    const p = { k, from: spotAt(k), to: spotAt(k + 1), kind: "stay" };
+    let route = null;
+    let speed = 0;
+    if (p.from !== p.to) {
+      p.kind = r() < 0.2 ? "scenic" : "run";
+      route = buildRoute(PLACES[p.from], PLACES[p.to], r, p.kind === "scenic");
+      speed = lerp(2.3, 3.3, r());
+      p.verb = pick(r, RUN_VERBS);
+    } else if (PLACES.length > 1) {
+      const roll = r();
+      if (roll < 0.3) {
+        p.kind = "forgot";
+        let other = Math.floor(r() * (PLACES.length - 1));
+        if (other >= p.from) other++;
+        p.toward = other;
+        const full = buildRoute(PLACES[p.from], PLACES[other], r, false);
+        const fullCum = measure(full);
+        p.fullLen = fullCum[fullCum.length - 1];
+        const out = slicePath(full, fullCum, p.fullLen * lerp(0.18, 0.45, r()));
+        p.turn = out[out.length - 1];
+        route = out.concat(out.slice(0, -1).reverse());
+        speed = lerp(2.3, 3.3, r());
+      } else if (roll < 0.48) {
+        p.kind = "laps";
+        const laps = buildLaps(PLACES[p.from], r);
+        route = laps.route;
+        p.laps = laps.laps;
+        speed = lerp(1.3, 1.8, r());
+      }
+    }
+    if (route) {
+      const cum = measure(route);
+      const len = cum[cum.length - 1];
+      if (len < 0.01) {
+        p.kind = "stay";
+      } else {
+        p.route = route;
+        p.cum = cum;
+        p.len = len;
+        const dur = Math.min(Math.max((len / speed) * 1000, 4500), SLOT_MS - 2500);
+        p.start = slotStart(k) + lerp(1000, SLOT_MS - dur - 1000, r());
+        p.end = p.start + dur;
+        p.msPerBlock = dur / len;
+        p.mph = (len * MILES_PER_BLOCK) / (dur / 3600000);
+        p.moveAccuracy = pick(r, ACCURACY);
+        if (p.kind === "run" || p.kind === "scenic") {
+          const corners = [];
+          for (let i = 1; i < route.length - 1; i++) {
+            if (isInt(route[i][0]) && isInt(route[i][1])) corners.push(i);
+          }
+          const i = corners.length ? pick(r, corners) : Math.floor(route.length / 2);
+          p.spotted = { x: route[i][0], y: route[i][1], d: cum[i] };
+        }
+      }
+    }
+    // What he gets up to once he's at p.to
+    p.here = pick(r, PLACES[p.to].here);
+    p.activity = pick(r, PLACES[p.to].activities);
+    p.accuracy = pick(r, ACCURACY);
+    plans.set(k, p);
+    return p;
+  }
+
+  function lastArrival(t) {
+    let k = slotOf(t);
+    for (let i = 0; i < 120; i++, k--) {
+      const p = plan(k);
+      if (p.kind !== "stay" && p.end <= t) return p;
+    }
+    return plan(slotOf(t));
+  }
+
+  function stateAt(t) {
+    const p = plan(slotOf(t));
+    if (p.kind !== "stay" && t >= p.start && t < p.end) return { moving: true, p };
+    const a = lastArrival(t);
+    return { moving: false, p: a, place: a.to, since: a.end !== undefined ? a.end : slotStart(a.k) };
+  }
+
+  /* ---------- Words ---------- */
+  const streetX = x => {
+    const v = Math.round(x);
+    return v === 0 ? "Main\u00a0St" : `${Math.abs(v) * 100}\u00a0${v > 0 ? "E" : "W"}`;
+  };
+  const streetY = y => {
+    const v = Math.round(y);
+    return v === 0 ? "Center\u00a0St" : `${Math.abs(v) * 100}\u00a0${v > 0 ? "N" : "S"}`;
+  };
+  const corner = (x, y) => `${streetY(y)} & ${streetX(x)}`;
+
+  const TIME = new Intl.DateTimeFormat(undefined, { hour: "numeric", minute: "2-digit", second: "2-digit" });
+  const fmt = t => TIME.format(new Date(t));
+
+  function eventsOf(p) {
+    if (p.kind === "stay") return [];
+    const from = PLACES[p.from];
+    const to = PLACES[p.to];
+    const at = d => p.start + d * p.msPerBlock;
+    if (p.kind === "laps") return [{ t: p.end, text: `Ran ${p.laps} laps around the block` }];
+    if (p.kind === "forgot") {
+      return [
+        { t: p.start, text: `Left ${from.phrase}` },
+        { t: at(p.len / 2), text: `Turned around near ${corner(p.turn[0], p.turn[1])}` },
+        { t: p.end, text: `Back at ${from.phrase}` }
+      ];
+    }
+    return [
+      { t: p.start, text: `Left ${from.phrase}` },
+      { t: at(p.spotted.d), text: `Spotted at ${corner(p.spotted.x, p.spotted.y)}` },
+      { t: p.end, text: `Arrived at ${to.phrase}` }
+    ];
+  }
+
+  function recentEvents(t, n) {
+    const out = [];
+    let k = slotOf(t);
+    for (let i = 0; i < 120 && out.length < n; i++, k--) {
+      const evs = eventsOf(plan(k)).filter(e => e.t <= t).reverse();
+      for (const e of evs) if (out.length < n) out.push(e);
+    }
+    return out;
+  }
+
+  function speedText(p, t) {
+    const wobble = 0.93 + 0.14 * rng(mix(SEED ^ 0x27d4eb2f, Math.floor(t / 350)))();
+    return `${Math.round(p.mph * wobble).toLocaleString()} mph`;
+  }
+
+  function wordsFor(s, t) {
+    const p = s.p;
+    if (!s.moving) {
+      return {
+        key: `here-${p.k}-${s.place}`,
+        line: `Blake is ${p.here}.`,
+        stats: [["Currently", p.activity], ["Here since", fmt(s.since)], ["Accuracy", p.accuracy]]
+      };
+    }
+    const from = PLACES[p.from];
+    const to = PLACES[p.to];
+    let key = `move-${p.k}`;
+    let eta = p.end;
+    let line;
+    if (p.kind === "scenic") {
+      line = `Blake is taking the scenic route to ${to.phrase}.`;
+    } else if (p.kind === "laps") {
+      line = "Blake is running laps around the block.";
+    } else if (p.kind === "forgot") {
+      const turned = t >= p.start + (p.len / 2) * p.msPerBlock;
+      key += turned ? "-back" : "-out";
+      if (turned) {
+        line = `Blake forgot something. Heading back to ${from.phrase}.`;
+      } else {
+        line = `Blake is heading to ${PLACES[p.toward].phrase}.`;
+        eta = p.start + p.fullLen * p.msPerBlock;
+      }
+    } else {
+      line = `Blake is ${p.verb} ${to.phrase}.`;
+    }
+    return { key, line, stats: [["Speed, on foot", speedText(p, t)], ["ETA", fmt(eta)], ["Accuracy", p.moveAccuracy]] };
+  }
+
+  /* ---------- Draw the map ---------- */
+  const NS = "http://www.w3.org/2000/svg";
+  function el(name, attrs, parent, text) {
+    const node = document.createElementNS(NS, name);
+    for (const a in attrs) node.setAttribute(a, attrs[a]);
+    if (text !== undefined) node.textContent = text;
+    parent.appendChild(node);
+    return node;
+  }
+  const pt = (x, y) => `${px(x).toFixed(1)},${py(y).toFixed(1)}`;
+
+  const svg = document.getElementById("map");
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  document.documentElement.style.setProperty("--map-aspect", (W / H).toFixed(4));
+
+  const base = el("g", {}, svg);
+  el("rect", { class: "land", width: W, height: H }, base);
+  for (let x = Math.ceil(B.minX); x <= Math.floor(B.maxX); x++) {
+    el("line", { class: x % 4 === 0 ? "st st-major" : "st", x1: px(x), y1: 0, x2: px(x), y2: H }, base);
+  }
+  for (let y = Math.ceil(B.minY); y <= Math.floor(B.maxY); y++) {
+    el("line", { class: y % 4 === 0 ? "st st-major" : "st", x1: 0, y1: py(y), x2: W, y2: py(y) }, base);
+  }
+
+  // Main St and 400 N
+  const ROADS = [[0, B.maxY + 1, 0, B.minY - 1], [B.minX - 1, 4, HILLS_X + 1, 4]];
+  for (const cls of ["road-edge", "road"]) {
+    for (const [ax, ay, bx, by] of ROADS) {
+      el("line", { class: cls, x1: px(ax), y1: py(ay), x2: px(bx), y2: py(by) }, base);
+    }
+  }
+
+  const CAMPUS = [[6.6, 4.7], [9.4, 4.5], [12.8, 4.6], [14.2, 5.6], [14.3, 8.2], [13.7, 10.9], [11.2, 11.5], [8.1, 11.2], [6.5, 9.9], [6.2, 7.1]];
+  el("polygon", { class: "campus", points: CAMPUS.map(([x, y]) => pt(x, y)).join(" ") }, base);
+
+  const ridge = [];
+  for (let y = B.maxY + 1; y >= B.minY - 1; y -= 0.5) {
+    ridge.push(pt(HILLS_X + 0.35 * Math.sin(y * 1.3) + 0.25 * Math.sin(y * 0.47 + 1.7), y));
+  }
+  ridge.push(pt(B.maxX + 1, B.minY - 1), pt(B.maxX + 1, B.maxY + 1));
+  el("polygon", { class: "hills", points: ridge.join(" ") }, base);
+  [[17.1, 10.4], [17.6, 7.0], [17.1, 3.1], [17.5, -0.9], [17.1, -4.7], [17.6, -8.3], [17.1, -11.6]]
+    .filter(([, y]) => y > B.minY + 0.5 && y < B.maxY - 0.5)
+    .forEach(([x, y]) => {
+      el("path", { class: "peak", d: `M${pt(x - 0.42, y - 0.28)} L${pt(x, y + 0.34)} L${pt(x + 0.42, y - 0.28)}` }, base);
+    });
+
+  const labels = el("g", {}, svg);
+  const label = (x, y, words, cls) => el("text", { class: cls || "lbl", x: px(x), y: py(y) }, labels, words);
+  label(0.4, B.minY + 0.6, "Main St");
+  label(B.minX + 0.4, 4.42, "400 N");
+  label(B.minX + 0.4, 0.42, "Center St", "lbl lbl-soft");
+  label(12.4, B.minY + 0.6, "1200 E", "lbl lbl-soft");
+  label(0.45, 1.45, "Downtown", "lbl lbl-soft");
+  label(7.2, 10.2, "USU", "lbl lbl-area");
+
+  const nx = px(B.minX + 0.95);
+  const ny = py(B.maxY - 0.95);
+  el("path", { class: "north", d: `M${nx},${ny - 9} L${nx + 6},${ny + 6} L${nx},${ny + 2.5} L${nx - 6},${ny + 6} Z` }, labels);
+  el("text", { class: "lbl lbl-north", x: nx, y: ny + 20, "text-anchor": "middle" }, labels, "N");
+
+  const spots = el("g", {}, svg);
+  PLACES.forEach(place => {
+    const g = el("g", { transform: `translate(${pt(place.x, place.y)})` }, spots);
+    el("title", {}, g, `${place.name}, ${place.address}`);
+    el("circle", { class: "spot-ring", r: 8 }, g);
+    el("circle", { class: "spot-dot", r: 2.8 }, g);
+    const left = place.labelSide === "left";
+    el("text", { class: "lbl lbl-place", x: left ? -17 : 17, y: 5, "text-anchor": left ? "end" : "start" }, g, place.name);
+  });
+
+  const routeEl = el("path", { class: "route", d: "" }, svg);
+  const runner = el("g", {}, svg);
+  const shadow = el("ellipse", { class: "shadow", cx: 0, cy: 0, rx: 10.5, ry: 3.8 }, runner);
+  const body = el("g", {}, runner);
+  const dust = el("text", { class: "emoji", x: 20, y: -1, "font-size": 15, "text-anchor": "middle" }, body, "💨");
+  const guy = el("text", { class: "emoji", x: 0, y: 2, "font-size": 32, "text-anchor": "middle" }, body, STANDING);
+  const bubble = el("g", {}, runner);
+  el("rect", { class: "bubble-box", x: -14, y: -61, width: 28, height: 23, rx: 8 }, bubble);
+  el("path", { class: "bubble-box", d: "M -4 -38.8 L 0 -32.5 L 4 -38.8" }, bubble);
+  const bubbleIcon = el("text", { class: "emoji", x: 0, y: -44.6, "font-size": 15, "text-anchor": "middle" }, bubble, "");
+
+  /* ---------- Run ---------- */
+  const statusEl = document.getElementById("status");
+  const keyEls = [0, 1, 2].map(i => document.getElementById("k" + i));
+  const valEls = [0, 1, 2].map(i => document.getElementById("v" + i));
+  const logEl = document.getElementById("log");
+  const reduceMotion = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : { matches: false };
+
+  let facing = -1;      // the emoji faces west by default
+  let routeFor = null;
+  let lastKey = "";
+  let lastSpeedAt = 0;
+  let lastLogAt = 0;
+  let lastLogSig = "";
+
+  const pathD = route => route.map(([x, y], i) => `${i ? "L" : "M"}${pt(x, y)}`).join(" ");
+
+  function renderLog(t) {
+    const evs = recentEvents(t, 4);
+    const sig = evs.map(e => e.t + e.text).join("|");
+    if (sig === lastLogSig) return;
+    lastLogSig = sig;
+    logEl.replaceChildren(...evs.map(e => {
+      const li = document.createElement("li");
+      const time = document.createElement("time");
+      time.dateTime = new Date(e.t).toISOString();
+      time.textContent = fmt(e.t);
+      const what = document.createElement("span");
+      what.textContent = e.text;
+      li.append(time, what);
+      return li;
+    }));
+  }
+
+  function draw(t) {
+    const s = stateAt(t);
+    const p = s.p;
+    const still = reduceMotion.matches;
+    let x;
+    let y;
+    if (s.moving) {
+      const at = pointAt(p.route, p.cum, ((t - p.start) / (p.end - p.start)) * p.len);
+      x = at.x;
+      y = at.y;
+      if (at.dx > 1e-6) facing = 1;
+      else if (at.dx < -1e-6) facing = -1;
+      if (routeFor !== p) {
+        routeEl.setAttribute("d", pathD(p.route));
+        routeFor = p;
+      }
+    } else {
+      x = PLACES[s.place].x;
+      y = PLACES[s.place].y;
+      if (routeFor) {
+        routeEl.setAttribute("d", "");
+        routeFor = null;
+      }
+    }
+
+    const bob = s.moving && !still ? -Math.abs(Math.sin(t / 90)) * 3.4 : 0;
+    runner.setAttribute("transform", `translate(${pt(x, y)})`);
+    body.setAttribute("transform", `translate(0,${bob.toFixed(2)}) scale(${facing > 0 ? -1 : 1},1)`);
+    shadow.setAttribute("rx", (10.5 + bob * 0.5).toFixed(2));
+
+    const face = s.moving ? RUNNING : STANDING;
+    if (guy.textContent !== face) guy.textContent = face;
+
+    const puffing = s.moving && !still;
+    dust.style.display = puffing ? "" : "none";
+    if (puffing) dust.setAttribute("opacity", (0.45 + 0.55 * Math.abs(Math.sin(t / 60))).toFixed(2));
+
+    bubble.style.display = s.moving ? "none" : "";
+    if (!s.moving) {
+      const icon = PLACES[s.place].icon;
+      if (bubbleIcon.textContent !== icon) bubbleIcon.textContent = icon;
+      bubble.setAttribute("transform", `translate(0,${still ? 0 : (Math.sin(t / 650) * 1.6).toFixed(2)})`);
+    }
+
+    const words = wordsFor(s, t);
+    if (words.key !== lastKey) {
+      lastKey = words.key;
+      statusEl.textContent = words.line;
+      words.stats.forEach(([k, v], i) => {
+        keyEls[i].textContent = k;
+        valEls[i].textContent = v;
+      });
+      lastSpeedAt = t;
+    } else if (s.moving && t - lastSpeedAt > 350) {
+      valEls[0].textContent = speedText(p, t);
+      lastSpeedAt = t;
+    }
+
+    if (t - lastLogAt > 500) {
+      renderLog(t);
+      lastLogAt = t;
+    }
+  }
+
+  function frame() {
+    draw(Date.now());
+    requestAnimationFrame(frame);
+  }
+  draw(Date.now());
+  requestAnimationFrame(frame);
+})();
+</script>
 </body>
 </html>
