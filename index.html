@@ -330,7 +330,8 @@
      To add a spot, copy one of these blocks. north/east are Logan grid numbers:
      820 N 1200 E is north: 820, east: 1200. South and west are negative,
      so 880 S Main St is north: -880, east: 0. "here" is how the line
-     "Blake is …" finishes while he's at that spot. */
+     "Blake is …" finishes while he's at that spot, and labelSide puts the
+     name "left", "right" or "below" the pin on the map. */
   const LOCATIONS = [
     {
       name: "The office",
@@ -375,6 +376,26 @@
         "Saying no to Sapporo",
         "Bartering with the staff",
         "Practicing chop stick skills"
+      ]
+    },
+    {
+      name: "Random Horse Corral",
+      phrase: "the Random Horse Corral",
+      address: "exact location unknown",
+      north: -880,
+      east: 1100,
+      icon: "🐎",
+      labelSide: "below",
+      here: ["at the Random Horse Corral", "inside the Random Horse Corral", "leaning on the fence at the Random Horse Corral", "back at the Random Horse Corral", "definitely at the Random Horse Corral", "probably at the Random Horse Corral", "allegedly at the Random Horse Corral"],
+      activities: [
+        "Asking a horse for directions",
+        "Resetting a horse’s password",
+        "Placing bets on the next horse race",
+        "Giving a horse a pep talk",
+        "Feeding a horse his egg rolls",
+        "Practicing his yeehaw",
+        "Getting stared down by a horse",
+        "Explaining Wi-Fi to a horse"
       ]
     }
   ];
@@ -795,8 +816,8 @@
     el("title", {}, g, `${place.name}, ${place.address}`);
     el("circle", { class: "spot-ring", r: 8 }, g);
     el("circle", { class: "spot-dot", r: 2.8 }, g);
-    const left = place.labelSide === "left";
-    el("text", { class: "lbl lbl-place", x: left ? -17 : 17, y: 5, "text-anchor": left ? "end" : "start" }, g, place.name);
+    const [lx, ly, anchor] = { left: [-17, 5, "end"], below: [0, 27, "middle"] }[place.labelSide] || [17, 5, "start"];
+    el("text", { class: "lbl lbl-place", x: lx, y: ly, "text-anchor": anchor }, g, place.name);
   });
 
   const routeEl = el("path", { class: "route", d: "" }, svg);
