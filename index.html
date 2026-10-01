@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Blake is out front</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Overpass:wght@800&display=swap">
+<style>
+  /* Day: highway-sign yellow with a black legend.
+     Night: asphalt with the legend lit up in sign yellow. */
+  :root {
+    --sign-yellow: #FFCD00;
+    --legend-black: #000000;
+    --asphalt: #26282B;
+
+    --ground: var(--sign-yellow);
+    --legend: var(--legend-black);
+
+    color-scheme: light;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: var(--asphalt);
+      --legend: var(--sign-yellow);
+      color-scheme: dark;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: var(--asphalt);
+    --legend: var(--sign-yellow);
+    color-scheme: dark;
+  }
+
+  *, *::before, *::after {
+    box-sizing: inherit;
+  }
+
+  html {
+    height: 100%;
+    background: var(--ground);
+    scroll-padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  body {
+    height: 100%;
+    margin: 0;
+    display: grid;
+    place-items: center;
+    background: var(--ground);
+    color: var(--legend);
+  }
+
+  h1 {
+    margin: 0;
+    padding-inline: max(6vw, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+    font-family: "Overpass", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 800;
+    font-size: min(15vw, 28vh);
+    line-height: 0.98;
+    letter-spacing: -0.01em;
+    text-align: center;
+    text-wrap: balance;
+  }
+
+  /* Keep each phrase together so the line break always lands between them. */
+  h1 span {
+    white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+  <h1><span>Blake is</span> <span>at his desk</span></h1>
+</body>
+</html>
