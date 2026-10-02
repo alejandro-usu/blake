@@ -1,0 +1,6 @@
+# GitHub Pages runs this repo through Jekyll. Only the page itself (and
+# CNAME) should end up on whereisblake.lol, not the notes and tools for
+# working on it.
+exclude:
+  - CLAUDE.md
+  - tools
