@@ -1,6 +1,6 @@
 # Where's Blake?
 
-A joke "live tracker." A little emoji guy, Blake, runs between real places in Logan, Utah on a hand-drawn map. None of it is real: every visitor's browser makes up its own schedule for him, so two people comparing screens see him in different places. Blake is a real person, so keep the jokes friendly.
+A joke "live tracker." Blake, a cutout of his own head, runs between real places in Logan, Utah on a hand-drawn map. None of it is real: every visitor's browser makes up its own schedule for him, so two people comparing screens see him in different places. Blake is a real person, so keep the jokes friendly.
 
 The whole site is one self-contained HTML file in this repo, with the HTML, CSS and JavaScript together. There's no build step and no framework. The page is served straight from the repo, so whatever gets merged is what visitors see. Don't rename the file, because its name is part of the public URL. The only outside request is Google Fonts (Overpass), and the page has to keep working if that fails to load.
 
@@ -30,6 +30,8 @@ The map is an SVG that the script draws in city-block coordinates. `S` is the nu
 - a blob for the USU campus
 - foothills along the east edge, which start at `HILLS_X`
 
+Blake himself is a small WebP of his head, embedded as a data URI in `<image id="blake-head">` inside the map's `<defs>`, so the page stays one file. To change the photo, replace that data URI and keep the image small (it's about 4 KB now). While he runs he leans toward where he's going, bobs, and leaves a 💨 behind him. The head is never mirrored, so his face always reads the right way round.
+
 Blake's schedule is deterministic for each visitor:
 
 1. A random seed is kept in localStorage under `wheres-blake-seed`.
@@ -47,7 +49,7 @@ Some things look like bugs but are jokes:
 ## Conventions
 
 - Colors are CSS custom properties on `:root`. Dark mode redefines them in two places, the `prefers-color-scheme` media query and `:root[data-theme="dark"]`, and the two blocks must stay identical.
-- Respect `prefers-reduced-motion`, which means no bobbing, dust puffs or pulsing dot.
+- Respect `prefers-reduced-motion`, which means no bobbing, head wobble, dust puffs or pulsing dot.
 - Keep every localStorage access inside try/catch.
 - Street names use non-breaking spaces so they never wrap in the middle.
 

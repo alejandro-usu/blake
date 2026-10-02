@@ -303,6 +303,10 @@
   <figure class="map">
     <svg id="map" viewBox="0 0 470 500" role="img" aria-labelledby="map-title" xmlns="http://www.w3.org/2000/svg">
       <title id="map-title">Map of Logan, Utah, showing where Blake supposedly is</title>
+      <defs>
+        <!-- Blake's head, cut out of his photo. This is what runs around the map. -->
+        <image id="blake-head" x="-12.7" y="-37" width="25.4" height="38" href="data:image/webp;base64,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"/>
+      </defs>
     </svg>
   </figure>
 
@@ -452,8 +456,6 @@
 
   const RUN_VERBS = ["sprinting to", "booking it to", "hustling over to", "running to", "racing to"];
   const ACCURACY = ["± 6 ft", "± 15 ft", "± 40 ft", "± 0.3 mi", "± 2 mi", "± 3 mi", "Somewhere in Cache Valley"];
-  const RUNNING = "🏃‍♂️";
-  const STANDING = "🧍‍♂️";
 
   const PLACES = LOCATIONS.map(l => Object.assign({ here: [`at ${l.phrase}`] }, l, { x: l.east / 100, y: l.north / 100 }));
 
@@ -883,12 +885,13 @@
   const runner = el("g", {}, svg);
   const shadow = el("ellipse", { class: "shadow", cx: 0, cy: 0, rx: 10.5, ry: 3.8 }, runner);
   const body = el("g", {}, runner);
-  const dust = el("text", { class: "emoji", x: 20, y: -1, "font-size": 15, "text-anchor": "middle" }, body, "💨");
-  const guy = el("text", { class: "emoji", x: 0, y: 2, "font-size": 32, "text-anchor": "middle" }, body, STANDING);
+  const trail = el("g", {}, body);
+  const dust = el("text", { class: "emoji", x: 20, y: -1, "font-size": 15, "text-anchor": "middle" }, trail, "💨");
+  const head = el("use", { href: "#blake-head" }, body);
   const bubble = el("g", {}, runner);
-  el("rect", { class: "bubble-box", x: -14, y: -61, width: 28, height: 23, rx: 8 }, bubble);
-  el("path", { class: "bubble-box", d: "M -4 -38.8 L 0 -32.5 L 4 -38.8" }, bubble);
-  const bubbleIcon = el("text", { class: "emoji", x: 0, y: -44.6, "font-size": 15, "text-anchor": "middle" }, bubble, "");
+  el("rect", { class: "bubble-box", x: -14, y: -72, width: 28, height: 23, rx: 8 }, bubble);
+  el("path", { class: "bubble-box", d: "M -4 -49.8 L 0 -43.5 L 4 -49.8" }, bubble);
+  const bubbleIcon = el("text", { class: "emoji", x: 0, y: -55.6, "font-size": 15, "text-anchor": "middle" }, bubble, "");
 
   /* ---------- Run ---------- */
   const statusEl = document.getElementById("status");
@@ -897,7 +900,7 @@
   const logEl = document.getElementById("log");
   const reduceMotion = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : { matches: false };
 
-  let facing = -1;      // the emoji faces west by default
+  let facing = -1;      // which way he's running: 1 is east, -1 is west
   let routeFor = null;
   let lastKey = "";
   let lastSpeedAt = 0;
@@ -949,12 +952,13 @@
     }
 
     const bob = s.moving && !still ? -Math.abs(Math.sin(t / 90)) * 3.4 : 0;
+    // Running, he leans into it and his head wobbles with each step
+    const tilt = s.moving ? facing * 9 + (still ? 0 : Math.sin(t / 90) * 5) : 0;
     runner.setAttribute("transform", `translate(${pt(x, y)})`);
-    body.setAttribute("transform", `translate(0,${bob.toFixed(2)}) scale(${facing > 0 ? -1 : 1},1)`);
+    body.setAttribute("transform", `translate(0,${bob.toFixed(2)})`);
+    head.setAttribute("transform", `rotate(${tilt.toFixed(1)} 0 1)`);
+    trail.setAttribute("transform", `scale(${facing > 0 ? -1 : 1},1)`);
     shadow.setAttribute("rx", (10.5 + bob * 0.5).toFixed(2));
-
-    const face = s.moving ? RUNNING : STANDING;
-    if (guy.textContent !== face) guy.textContent = face;
 
     const puffing = s.moving && !still;
     dust.style.display = puffing ? "" : "none";
