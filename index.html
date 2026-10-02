@@ -179,8 +179,8 @@
   .land { fill: var(--land); }
   .st { stroke: var(--street); stroke-width: 2.4px; }
   .st-major { stroke-width: 4.4px; }
-  .road-edge { stroke: var(--road-edge); stroke-width: 8.6px; stroke-linecap: round; }
-  .road { stroke: var(--road); stroke-width: 6px; stroke-linecap: round; }
+  .road-edge { fill: none; stroke: var(--road-edge); stroke-width: 8.6px; stroke-linecap: round; stroke-linejoin: round; }
+  .road { fill: none; stroke: var(--road); stroke-width: 6px; stroke-linecap: round; stroke-linejoin: round; }
   .campus { fill: var(--campus); stroke: var(--campus); stroke-width: 14px; stroke-linejoin: round; }
   .hills { fill: var(--hills); }
   .peak { fill: none; stroke: var(--hills-line); stroke-width: 2px; stroke-linecap: round; stroke-linejoin: round; }
@@ -396,6 +396,26 @@
         "Practicing his yeehaw",
         "Getting stared down by a horse",
         "Explaining Wi-Fi to a horse"
+      ]
+    },
+    {
+      name: "O’Reilly Auto Parts",
+      phrase: "O’Reilly Auto Parts",
+      address: "9 E 1400 N, Logan, UT 84341",
+      north: 1400,
+      east: 9,
+      icon: "🔧",
+      labelSide: "right",
+      here: ["at O’Reilly Auto Parts", "inside O’Reilly Auto Parts", "in the O’Reilly parking lot", "definitely at O’Reilly Auto Parts", "probably at O’Reilly Auto Parts", "allegedly at O’Reilly Auto Parts"],
+      activities: [
+        "Asking for blinker fluid",
+        "Buying one windshield wiper",
+        "Getting his check engine light read",
+        "Describing a part by making noises",
+        "Asking if they carry horseshoes",
+        "Still looking for a USB-C dongle",
+        "Comparing air fresheners",
+        "Buying parts for a car he doesn’t own"
       ]
     }
   ];
@@ -634,12 +654,18 @@
         p.mph = (len * MILES_PER_BLOCK) / (dur / 3600000);
         p.moveAccuracy = pick(r, ACCURACY);
         if (p.kind === "run" || p.kind === "scenic") {
+          // A street corner along the way, not right next to either end
           const corners = [];
           for (let i = 1; i < route.length - 1; i++) {
-            if (isInt(route[i][0]) && isInt(route[i][1])) corners.push(i);
+            if (isInt(route[i][0]) && isInt(route[i][1]) && cum[i] > 1.5 && cum[i] < len - 1.5) corners.push(i);
           }
-          const i = corners.length ? pick(r, corners) : Math.floor(route.length / 2);
-          p.spotted = { x: route[i][0], y: route[i][1], d: cum[i] };
+          if (corners.length) {
+            const i = pick(r, corners);
+            p.spotted = { x: route[i][0], y: route[i][1], d: cum[i] };
+          } else {
+            const mid = pointAt(route, cum, len / 2);
+            p.spotted = { x: mid.x, y: mid.y, d: len / 2 };
+          }
         }
       }
     }
@@ -773,12 +799,16 @@
     el("line", { class: y % 4 === 0 ? "st st-major" : "st", x1: 0, y1: py(y), x2: W, y2: py(y) }, base);
   }
 
-  // Main St and 400 N
-  const ROADS = [[0, B.maxY + 1, 0, B.minY - 1], [B.minX - 1, 4, HILLS_X + 1, 4]];
+  // Main St comes down from the north and forks just above Royal Express:
+  // US-89/91 bends off to the southwest, and S Main St carries on straight
+  // south as an ordinary street (the grid already draws that part). Then 400 N.
+  const FORK = [[0, -7.6], [0, -9.4], [-2.2, -11.6], [-5.1, -14.2]];   // curve control points, in blocks
+  const ROADS = [
+    `M${pt(0, B.maxY + 1)} L${pt(...FORK[0])} C${pt(...FORK[1])} ${pt(...FORK[2])} ${pt(...FORK[3])} L${pt(-5.1 - 2.9 * 6, -14.2 - 2.6 * 6)}`,
+    `M${pt(B.minX - 1, 4)} L${pt(HILLS_X + 1, 4)}`
+  ];
   for (const cls of ["road-edge", "road"]) {
-    for (const [ax, ay, bx, by] of ROADS) {
-      el("line", { class: cls, x1: px(ax), y1: py(ay), x2: px(bx), y2: py(by) }, base);
-    }
+    for (const d of ROADS) el("path", { class: cls, d }, base);
   }
 
   const CAMPUS = [[6.6, 4.7], [9.4, 4.5], [12.8, 4.6], [14.2, 5.6], [14.3, 8.2], [13.7, 10.9], [11.2, 11.5], [8.1, 11.2], [6.5, 9.9], [6.2, 7.1]];
@@ -790,7 +820,7 @@
   }
   ridge.push(pt(B.maxX + 1, B.minY - 1), pt(B.maxX + 1, B.maxY + 1));
   el("polygon", { class: "hills", points: ridge.join(" ") }, base);
-  [[17.1, 10.4], [17.6, 7.0], [17.1, 3.1], [17.5, -0.9], [17.1, -4.7], [17.6, -8.3], [17.1, -11.6]]
+  [[17.1, 17.2], [17.6, 13.9], [17.1, 10.4], [17.6, 7.0], [17.1, 3.1], [17.5, -0.9], [17.1, -4.7], [17.6, -8.3], [17.1, -11.6]]
     .filter(([, y]) => y > B.minY + 0.5 && y < B.maxY - 0.5)
     .forEach(([x, y]) => {
       el("path", { class: "peak", d: `M${pt(x - 0.42, y - 0.28)} L${pt(x, y + 0.34)} L${pt(x + 0.42, y - 0.28)}` }, base);
@@ -804,6 +834,10 @@
   label(12.4, B.minY + 0.6, "1200 E", "lbl lbl-soft");
   label(0.45, 1.45, "Downtown", "lbl lbl-soft");
   label(7.2, 10.2, "USU", "lbl lbl-area");
+  label(B.minX + 0.4, 14.42, "1400 N", "lbl lbl-soft");
+  const hwX = px(-2.31);
+  const hwY = py(-11.03);
+  el("text", { class: "lbl", x: hwX, y: hwY, "text-anchor": "middle", transform: `rotate(-47.4 ${hwX} ${hwY})` }, labels, "US-89/91");
 
   const nx = px(B.minX + 0.95);
   const ny = py(B.maxY - 0.95);
