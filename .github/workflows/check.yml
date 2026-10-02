@@ -1,0 +1,18 @@
+# Runs tools/check.js on every push and pull request. If the page is broken
+# (a missing comma, Blake teleporting, a blank status line...), the run fails
+# and GitHub emails whoever pushed.
+name: Check the page
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node --version
+      - run: node tools/check.js index.html

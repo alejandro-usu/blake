@@ -69,4 +69,6 @@ It only needs Node 18 or later. It simulates several visitors for a few hours ea
 
 Then it prints every status line, activity and log entry the page can produce. Read through them, because each one has to sound like natural English.
 
+GitHub runs the same check on every push to `main` and on every pull request (`.github/workflows/check.yml`). The owner sometimes edits `index.html` straight on GitHub, so a failed run on `main` usually means the live site is broken right now, and GitHub emails whoever pushed.
+
 If a headless browser such as Playwright is available, also screenshot the page at desktop and mobile widths in both light and dark mode. Check that the place labels don't collide with each other or with roads.
