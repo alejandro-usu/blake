@@ -107,12 +107,13 @@
   }
 
   .page {
+    --gutter: clamp(16px, 4vw, 44px);
     max-width: 1180px;
     margin: 0 auto;
-    padding-top: clamp(16px, 4vw, 44px);
+    padding-top: var(--gutter);
     padding-bottom: clamp(28px, 6vw, 60px);
-    padding-left: max(clamp(16px, 4vw, 44px), env(safe-area-inset-left, 0px));
-    padding-right: max(clamp(16px, 4vw, 44px), env(safe-area-inset-right, 0px));
+    padding-left: max(var(--gutter), env(safe-area-inset-left, 0px));
+    padding-right: max(var(--gutter), env(safe-area-inset-right, 0px));
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas: "bar" "map" "readout" "log";
@@ -280,9 +281,12 @@
         "log map";
       column-gap: clamp(32px, 4vw, 60px);
       align-items: start;
+      padding-bottom: var(--gutter);
     }
+    /* As tall as the window allows, minus the page's top and bottom padding,
+       so the page never needs to scroll. */
     .map {
-      width: min(100%, calc((100vh - 64px) * var(--map-aspect, 0.94)));
+      width: min(100%, calc((100vh - 2 * var(--gutter)) * var(--map-aspect, 0.94)));
       justify-self: end;
     }
     .status { min-height: 3.12em; }
