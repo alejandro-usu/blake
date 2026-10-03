@@ -893,8 +893,6 @@
   const runner = el("g", {}, svg);
   const shadow = el("ellipse", { class: "shadow", cx: 0, cy: 0, rx: 10.5, ry: 3.8 }, runner);
   const body = el("g", {}, runner);
-  const trail = el("g", {}, body);
-  const dust = el("text", { class: "emoji", x: 20, y: -1, "font-size": 15, "text-anchor": "middle" }, trail, "💨");
   const head = el("use", { href: "#blake-head" }, body);
   const bubble = el("g", {}, runner);
   el("rect", { class: "bubble-box", x: -14, y: -72, width: 28, height: 23, rx: 8 }, bubble);
@@ -965,12 +963,7 @@
     runner.setAttribute("transform", `translate(${pt(x, y)})`);
     body.setAttribute("transform", `translate(0,${bob.toFixed(2)})`);
     head.setAttribute("transform", `rotate(${tilt.toFixed(1)} 0 1)`);
-    trail.setAttribute("transform", `scale(${facing > 0 ? -1 : 1},1)`);
     shadow.setAttribute("rx", (10.5 + bob * 0.5).toFixed(2));
-
-    const puffing = s.moving && !still;
-    dust.style.display = puffing ? "" : "none";
-    if (puffing) dust.setAttribute("opacity", (0.45 + 0.55 * Math.abs(Math.sin(t / 60))).toFixed(2));
 
     bubble.style.display = s.moving ? "none" : "";
     if (!s.moving) {
