@@ -321,6 +321,7 @@
       <div class="wide"><dt id="k0">Currently</dt><dd id="v0">…</dd></div>
       <div><dt id="k1">Here since</dt><dd id="v1">…</dd></div>
       <div><dt id="k2">Accuracy</dt><dd id="v2">…</dd></div>
+      <div class="wide" id="r3" hidden><dt id="k3">Money Lost</dt><dd id="v3">…</dd></div>
     </dl>
   </section>
 
@@ -479,6 +480,7 @@
       east: 400,
       icon: "🎰",
       labelSide: "right",
+      debt: true,
       here: ["at the casino", "at the slot machines", "at the blackjack table", "still at the casino", "back at the casino", "definitely at the casino", "probably at the casino", "allegedly at the casino"],
       activities: [
         "Losing all his money",
@@ -808,6 +810,34 @@
     return out;
   }
 
+  // US National Debt ("Debt to the Penny"), anchored to Treasury Fiscal Data
+  let debtBase = 40388317675071.91;
+  let debtEpoch = Date.UTC(2026, 9, 15);
+  let debtRate = 102467.132 / 1000; // $/ms
+  const USD = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
+  const debtText = t => USD.format(Math.max(0, debtBase + (t - debtEpoch) * debtRate));
+
+  if (typeof fetch === "function" && typeof location === "object") {
+    fetch("https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v2/accounting/od/debt_to_penny?sort=-record_date&page[size]=30")
+      .then(r => (r.ok ? r.json() : null))
+      .then(j => {
+        const rows = j && j.data;
+        if (!Array.isArray(rows) || !rows.length) return;
+        const latest = Number(rows[0].tot_pub_debt_out_amt);
+        const epoch = Date.parse(rows[0].record_date + "T00:00:00Z");
+        if (!Number.isFinite(latest) || !Number.isFinite(epoch)) return;
+        debtBase = latest;
+        debtEpoch = epoch;
+        const oldest = rows[rows.length - 1];
+        const oldVal = Number(oldest.tot_pub_debt_out_amt);
+        const oldEpoch = Date.parse(oldest.record_date + "T00:00:00Z");
+        if (Number.isFinite(oldVal) && Number.isFinite(oldEpoch) && epoch > oldEpoch && latest > oldVal) {
+          debtRate = (latest - oldVal) / (epoch - oldEpoch);
+        }
+      })
+      .catch(() => {});
+  }
+
   function speedText(p, t) {
     const wobble = 0.93 + 0.14 * rng(mix(SEED ^ 0x27d4eb2f, Math.floor(t / 350)))();
     return `${Math.round(p.mph * wobble).toLocaleString()} mph`;
@@ -816,10 +846,12 @@
   function wordsFor(s, t) {
     const p = s.p;
     if (!s.moving) {
+      const stats = [["Currently", p.activity], ["Here since", fmt(s.since)], ["Accuracy", p.accuracy]];
+      if (PLACES[s.place].debt) stats.push(["Money Lost", debtText(t)]);
       return {
         key: `here-${p.k}-${s.place}`,
         line: `Blake is ${p.here}.`,
-        stats: [["Currently", p.activity], ["Here since", fmt(s.since)], ["Accuracy", p.accuracy]]
+        stats
       };
     }
     const from = PLACES[p.from];
@@ -937,8 +969,9 @@
 
   /* ---------- Run ---------- */
   const statusEl = document.getElementById("status");
-  const keyEls = [0, 1, 2].map(i => document.getElementById("k" + i));
-  const valEls = [0, 1, 2].map(i => document.getElementById("v" + i));
+  const keyEls = [0, 1, 2, 3].map(i => document.getElementById("k" + i));
+  const valEls = [0, 1, 2, 3].map(i => document.getElementById("v" + i));
+  const extraRow = document.getElementById("r3");
   const logEl = document.getElementById("log");
   const reduceMotion = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : { matches: false };
 
@@ -946,6 +979,7 @@
   let routeFor = null;
   let lastKey = "";
   let lastSpeedAt = 0;
+  let lastDebtAt = 0;
   let lastLogAt = 0;
   let lastLogSig = "";
 
@@ -1016,10 +1050,15 @@
         keyEls[i].textContent = k;
         valEls[i].textContent = v;
       });
+      extraRow.hidden = words.stats.length < 4;
       lastSpeedAt = t;
+      lastDebtAt = t;
     } else if (s.moving && t - lastSpeedAt > 350) {
       valEls[0].textContent = speedText(p, t);
       lastSpeedAt = t;
+    } else if (!s.moving && PLACES[s.place].debt && (!still || t - lastDebtAt > 1000)) {
+      valEls[3].textContent = debtText(t);
+      lastDebtAt = t;
     }
 
     if (t - lastLogAt > 500) {
