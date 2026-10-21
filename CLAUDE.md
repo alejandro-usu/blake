@@ -22,7 +22,7 @@ The owner writes some of the jokes themselves. Leave their wording alone unless 
 
 ## Temporary: the Moab trip
 
-The site is in trip mode for a week-long work trip. The `TRIP` block in the script, just after the constants, replaces the places with Miguel's Baja Grill in Moab, and `drawMoab()` draws Moab instead of Logan. Blake never leaves Miguel's, so he never runs anywhere; his status line, activity and the "Recent sightings" log change every slot instead. `LOCATIONS` and the Logan map code are untouched. To end the trip, revert the trip's pull requests newest first (#11, then #10; later ones edit the block #10 added, so reverting #10 alone conflicts), or set `TRIP` to `null`.
+The site is in trip mode for a week-long work trip. The `TRIP` block in the script, just after the constants, replaces the places with Miguel's Baja Grill in Moab, and `drawMoab()` draws Moab instead of Logan. Blake never leaves Miguel's, so he never runs anywhere; his status line, activity and the "Recent sightings" log change every slot instead. `LOCATIONS` and the Logan map code are untouched. To end the trip, revert every trip pull request, newest first: #10 started it and later ones edit the block it added, so reverting #10 alone conflicts. Or set `TRIP` to `null`.
 
 ## How the rest works
 
