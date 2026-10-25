@@ -27,9 +27,6 @@
     --campus: #CDE1BC;
     --hills: #D3D6BE;
     --hills-line: #A3A886;
-    --rock: #E9B48F;
-    --rock-line: #B8714B;
-    --water: #8EC5E0;
     --map-ink: #000000;
     --route: #000000;
     --spot-fill: #FFFFFF;
@@ -60,9 +57,6 @@
       --campus: #2D4333;
       --hills: #393D33;
       --hills-line: #5E634B;
-      --rock: #5A3A2D;
-      --rock-line: #8C5B43;
-      --water: #2D5B74;
       --map-ink: #ECEAE2;
       --route: #FFFFFF;
       --spot-fill: #26282B;
@@ -86,9 +80,6 @@
     --campus: #2D4333;
     --hills: #393D33;
     --hills-line: #5E634B;
-    --rock: #5A3A2D;
-    --rock-line: #8C5B43;
-    --water: #2D5B74;
     --map-ink: #ECEAE2;
     --route: #FFFFFF;
     --spot-fill: #26282B;
@@ -194,9 +185,6 @@
   .campus { fill: var(--campus); stroke: var(--campus); stroke-width: 14px; stroke-linejoin: round; }
   .hills { fill: var(--hills); }
   .peak { fill: none; stroke: var(--hills-line); stroke-width: 2px; stroke-linecap: round; stroke-linejoin: round; }
-  .rock { fill: var(--rock); }
-  .mesa { fill: none; stroke: var(--rock-line); stroke-width: 2px; stroke-linecap: round; stroke-linejoin: round; }
-  .river { fill: none; stroke: var(--water); stroke-width: 13px; stroke-linecap: round; }
   .lbl {
     fill: var(--map-ink);
     font-size: 12.5px;
@@ -515,49 +503,12 @@
   const RUN_VERBS = ["sprinting to", "booking it to", "hustling over to", "running to", "racing to"];
   const ACCURACY = ["± 6 ft", "± 15 ft", "± 40 ft", "± 0.3 mi", "± 2 mi", "± 3 mi", "Somewhere in Cache Valley"];
 
-  /* ---------- Temporary: the Moab work trip ----------
-     While TRIP is set, the map shows Moab instead of Logan and Blake never
-     leaves Miguel's; only what he's up to changes. To go back to Logan,
-     revert the trip's pull requests newest first, or set TRIP to null. */
-  const TRIP = {
-    place: {
-      name: "Miguel’s Baja Grill",
-      phrase: "Miguel’s",
-      address: "Moab, UT",
-      north: 50,
-      east: 0,
-      icon: "🌮",
-      labelSide: "right",
-      here: ["at Miguel’s Baja Grill", "still at Miguel’s Baja Grill", "at Miguel’s Baja Grill in Moab", "in his usual booth at Miguel’s", "on the patio at Miguel’s", "somehow still at Miguel’s", "at Miguel’s, obviously", "definitely at Miguel’s"],
-      activities: [
-        "Ordering the fish tacos for the fifth day in a row",
-        "Eating a burrito the size of his Subaru",
-        "Asking if the chips and salsa are bottomless (they are now)",
-        "Turning the fajitas off and on again",
-        "Filing a ticket because the salsa is too spicy",
-        "Asking for the Wi-Fi password and more guac",
-        "Ordering the shrimp tacos to go, then staying",
-        "Waiting 45 minutes for a table he never left",
-        "Debating fish tacos vs. plum chicken",
-        "Ordering the enchiladas “for the team”",
-        "Telling the waiter he’s “basically a local now”",
-        "Ordering the family-size carne asada, for one",
-        "Writing a five-star review between bites",
-        "Dragging Alejandro out (unconscious)",
-        "(In a Leonardo DiCaprio voice) I’m not effin leaving!!!"
-      ]
-    },
-    since: "Day one of the trip",
-    accuracy: ["± 0 ft", "± 2 ft", "Same booth as yesterday", "Exactly where we left him", "Somewhere in Moab"],
-    frame: { minX: -8, maxX: 12, minY: -11, maxY: 12 }   // in blocks, around Center & Main
-  };
-
-  const PLACES = (TRIP ? [TRIP.place] : LOCATIONS).map(l => Object.assign({ here: [`at ${l.phrase}`] }, l, { x: l.east / 100, y: l.north / 100 }));
+  const PLACES = LOCATIONS.map(l => Object.assign({ here: [`at ${l.phrase}`] }, l, { x: l.east / 100, y: l.north / 100 }));
 
   /* ---------- Map frame, in city blocks ---------- */
   const xs = PLACES.map(p => p.x);
   const ys = PLACES.map(p => p.y);
-  const B = TRIP ? TRIP.frame : {
+  const B = {
     minX: Math.floor(Math.min(0, ...xs) - 5),
     maxX: Math.max(12, ...xs) + 6.5,
     minY: Math.floor(Math.min(...ys) - 3.5),
@@ -794,7 +745,7 @@
     // What he gets up to once he's at p.to
     p.here = pick(r, PLACES[p.to].here);
     p.activity = pick(r, PLACES[p.to].activities);
-    p.accuracy = pick(r, TRIP ? TRIP.accuracy : ACCURACY);
+    p.accuracy = pick(r, ACCURACY);
     plans.set(k, p);
     return p;
   }
@@ -830,7 +781,7 @@
   const fmt = t => TIME.format(new Date(t));
 
   function eventsOf(p) {
-    if (p.kind === "stay") return TRIP ? [{ t: slotStart(p.k), text: p.activity }] : [];
+    if (p.kind === "stay") return [];
     const from = PLACES[p.from];
     const to = PLACES[p.to];
     const at = d => p.start + d * p.msPerBlock;
@@ -895,7 +846,7 @@
   function wordsFor(s, t) {
     const p = s.p;
     if (!s.moving) {
-      const stats = [["Currently", p.activity], ["Here since", TRIP ? TRIP.since : fmt(s.since)], ["Accuracy", p.accuracy]];
+      const stats = [["Currently", p.activity], ["Here since", fmt(s.since)], ["Accuracy", p.accuracy]];
       if (PLACES[s.place].debt) stats.push(["Money Lost", debtText(t)]);
       return {
         key: `here-${p.k}-${s.place}`,
@@ -951,78 +902,45 @@
     el("line", { class: y % 4 === 0 ? "st st-major" : "st", x1: 0, y1: py(y), x2: W, y2: py(y) }, base);
   }
 
+  // Main St comes down from the north and forks just above Royal Express:
+  // US-89/91 bends off to the southwest, and S Main St carries on straight
+  // south as an ordinary street (the grid already draws that part). Then 400 N.
+  const FORK = [[0, -7.6], [0, -9.4], [-2.2, -11.6], [-5.1, -14.2]];   // curve control points, in blocks
+  const ROADS = [
+    `M${pt(0, B.maxY + 1)} L${pt(...FORK[0])} C${pt(...FORK[1])} ${pt(...FORK[2])} ${pt(...FORK[3])} L${pt(-5.1 - 2.9 * 6, -14.2 - 2.6 * 6)}`,
+    `M${pt(B.minX - 1, 4)} L${pt(HILLS_X + 1, 4)}`
+  ];
+  for (const cls of ["road-edge", "road"]) {
+    for (const d of ROADS) el("path", { class: cls, d }, base);
+  }
+
+  const CAMPUS = [[6.6, 4.7], [9.4, 4.5], [12.8, 4.6], [14.2, 5.6], [14.3, 8.2], [13.7, 10.9], [11.2, 11.5], [8.1, 11.2], [6.5, 9.9], [6.2, 7.1]];
+  el("polygon", { class: "campus", points: CAMPUS.map(([x, y]) => pt(x, y)).join(" ") }, base);
+
+  const ridge = [];
+  for (let y = B.maxY + 1; y >= B.minY - 1; y -= 0.5) {
+    ridge.push(pt(HILLS_X + 0.35 * Math.sin(y * 1.3) + 0.25 * Math.sin(y * 0.47 + 1.7), y));
+  }
+  ridge.push(pt(B.maxX + 1, B.minY - 1), pt(B.maxX + 1, B.maxY + 1));
+  el("polygon", { class: "hills", points: ridge.join(" ") }, base);
+  [[17.1, 17.2], [17.6, 13.9], [17.1, 10.4], [17.6, 7.0], [17.1, 3.1], [17.5, -0.9], [17.1, -4.7], [17.6, -8.3], [17.1, -11.6]]
+    .filter(([, y]) => y > B.minY + 0.5 && y < B.maxY - 0.5)
+    .forEach(([x, y]) => {
+      el("path", { class: "peak", d: `M${pt(x - 0.42, y - 0.28)} L${pt(x, y + 0.34)} L${pt(x + 0.42, y - 0.28)}` }, base);
+    });
+
   const labels = el("g", {}, svg);
   const label = (x, y, words, cls) => el("text", { class: cls || "lbl", x: px(x), y: py(y) }, labels, words);
-
-  if (TRIP) drawMoab();
-  else drawLogan();
-
-  function drawLogan() {
-    // Main St comes down from the north and forks just above Royal Express:
-    // US-89/91 bends off to the southwest, and S Main St carries on straight
-    // south as an ordinary street (the grid already draws that part). Then 400 N.
-    const FORK = [[0, -7.6], [0, -9.4], [-2.2, -11.6], [-5.1, -14.2]];   // curve control points, in blocks
-    const ROADS = [
-      `M${pt(0, B.maxY + 1)} L${pt(...FORK[0])} C${pt(...FORK[1])} ${pt(...FORK[2])} ${pt(...FORK[3])} L${pt(-5.1 - 2.9 * 6, -14.2 - 2.6 * 6)}`,
-      `M${pt(B.minX - 1, 4)} L${pt(HILLS_X + 1, 4)}`
-    ];
-    for (const cls of ["road-edge", "road"]) {
-      for (const d of ROADS) el("path", { class: cls, d }, base);
-    }
-
-    const CAMPUS = [[6.6, 4.7], [9.4, 4.5], [12.8, 4.6], [14.2, 5.6], [14.3, 8.2], [13.7, 10.9], [11.2, 11.5], [8.1, 11.2], [6.5, 9.9], [6.2, 7.1]];
-    el("polygon", { class: "campus", points: CAMPUS.map(([x, y]) => pt(x, y)).join(" ") }, base);
-
-    const ridge = [];
-    for (let y = B.maxY + 1; y >= B.minY - 1; y -= 0.5) {
-      ridge.push(pt(HILLS_X + 0.35 * Math.sin(y * 1.3) + 0.25 * Math.sin(y * 0.47 + 1.7), y));
-    }
-    ridge.push(pt(B.maxX + 1, B.minY - 1), pt(B.maxX + 1, B.maxY + 1));
-    el("polygon", { class: "hills", points: ridge.join(" ") }, base);
-    [[17.1, 17.2], [17.6, 13.9], [17.1, 10.4], [17.6, 7.0], [17.1, 3.1], [17.5, -0.9], [17.1, -4.7], [17.6, -8.3], [17.1, -11.6]]
-      .filter(([, y]) => y > B.minY + 0.5 && y < B.maxY - 0.5)
-      .forEach(([x, y]) => {
-        el("path", { class: "peak", d: `M${pt(x - 0.42, y - 0.28)} L${pt(x, y + 0.34)} L${pt(x + 0.42, y - 0.28)}` }, base);
-      });
-
-    label(0.4, B.minY + 0.6, "Main St");
-    label(B.minX + 0.4, 4.42, "400 N");
-    label(B.minX + 0.4, 0.42, "Center St", "lbl lbl-soft");
-    label(12.4, B.minY + 0.6, "1200 E", "lbl lbl-soft");
-    label(0.45, 1.45, "Downtown", "lbl lbl-soft");
-    label(7.2, 10.2, "USU", "lbl lbl-area");
-    label(B.minX + 0.4, 14.42, "1400 N", "lbl lbl-soft");
-    const hwX = px(-2.31);
-    const hwY = py(-11.03);
-    el("text", { class: "lbl", x: hwX, y: hwY, "text-anchor": "middle", transform: `rotate(-47.4 ${hwX} ${hwY})` }, labels, "US-89/91");
-  }
-
-  // Temporary, for the Moab trip. US-191 is Main St through town, then bends
-  // northwest over the Colorado River toward Arches. Red rock on both sides.
-  function drawMoab() {
-    for (const [x0, edge] of [[-6.4, B.minX - 1], [10.4, B.maxX + 1]]) {
-      const wall = [];
-      for (let y = B.maxY + 1; y >= B.minY - 1; y -= 0.5) {
-        wall.push(pt(x0 + 0.35 * Math.sin(y * 1.1 + x0) + 0.2 * Math.sin(y * 0.4), y));
-      }
-      wall.push(pt(edge, B.minY - 1), pt(edge, B.maxY + 1));
-      el("polygon", { class: "rock", points: wall.join(" ") }, base);
-    }
-    [[-7.3, 8.6], [-7.1, 1.6], [-7.3, -5.2], [11.3, 7.4], [11.1, -0.8], [11.3, -7.9]].forEach(([x, y]) => {
-      el("path", { class: "mesa", d: `M${pt(x - 0.5, y - 0.3)} L${pt(x - 0.3, y + 0.2)} L${pt(x + 0.3, y + 0.2)} L${pt(x + 0.5, y - 0.3)}` }, base);
-    });
-    el("path", { class: "river", d: `M${pt(B.maxX + 1, 11.4)} C${pt(8, 9.6)} ${pt(3, 10.6)} ${pt(-1.5, 9.5)} C${pt(-5, 8.7)} ${pt(-6.5, 5.5)} ${pt(B.minX - 1, 3.5)}` }, base);
-    const d = `M${pt(0, B.minY - 1)} L${pt(0, 6.5)} C${pt(0, 8.5)} ${pt(-2, 9.6)} ${pt(-3.2, 11)} L${pt(-4.4, B.maxY + 1)}`;
-    for (const cls of ["road-edge", "road"]) el("path", { class: cls, d }, base);
-
-    label(0.4, B.minY + 0.6, "Main St");
-    label(0.4, 5.4, "US-191");
-    label(-5.4, 0.42, "Center St", "lbl lbl-soft");
-    label(2.2, -4.2, "MOAB", "lbl lbl-area");
-    label(3.4, 11.2, "Colorado River", "lbl lbl-soft");
-    label(-2.4, 11.3, "Arches NP ↑", "lbl lbl-soft");
-    document.getElementById("map-title").textContent = "Map of Moab, Utah, showing where Blake supposedly is";
-  }
+  label(0.4, B.minY + 0.6, "Main St");
+  label(B.minX + 0.4, 4.42, "400 N");
+  label(B.minX + 0.4, 0.42, "Center St", "lbl lbl-soft");
+  label(12.4, B.minY + 0.6, "1200 E", "lbl lbl-soft");
+  label(0.45, 1.45, "Downtown", "lbl lbl-soft");
+  label(7.2, 10.2, "USU", "lbl lbl-area");
+  label(B.minX + 0.4, 14.42, "1400 N", "lbl lbl-soft");
+  const hwX = px(-2.31);
+  const hwY = py(-11.03);
+  el("text", { class: "lbl", x: hwX, y: hwY, "text-anchor": "middle", transform: `rotate(-47.4 ${hwX} ${hwY})` }, labels, "US-89/91");
 
   const nx = px(B.minX + 0.95);
   const ny = py(B.maxY - 0.95);

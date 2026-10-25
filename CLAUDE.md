@@ -20,10 +20,6 @@ Places live in the `LOCATIONS` array at the top of the script, and most requests
 
 The owner writes some of the jokes themselves. Leave their wording alone unless asked, even where it looks like a typo.
 
-## Temporary: the Moab trip
-
-The site is in trip mode for a week-long work trip. The `TRIP` block in the script, just after the constants, replaces the places with Miguel's Baja Grill in Moab, and `drawMoab()` draws Moab instead of Logan. Blake never leaves Miguel's, so he never runs anywhere; his status line, activity and the "Recent sightings" log change every slot instead. `LOCATIONS` and the Logan map code are untouched. To end the trip, revert every trip pull request, newest first: #10 started it and later ones edit the block it added, so reverting #10 alone conflicts. Or set `TRIP` to `null`.
-
 ## How the rest works
 
 The map is an SVG that the script draws in city-block coordinates. `S` is the number of SVG units per block, and `px()` and `py()` convert block coordinates to SVG coordinates. It's a cartoon, and the geography is approximate on purpose. It shows:
