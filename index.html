@@ -1036,7 +1036,9 @@
     el("text", { class: "lbl lbl-place", x: lx, y: ly, "text-anchor": anchor }, g, place.name);
   });
 
+  // The dotted path of a run, while it lasts. Both go under both heads.
   const routeEl = el("path", { class: "route", d: "" }, svg);
+  const coRouteEl = COWORKER ? el("path", { class: "route", d: "" }, svg) : null;
 
   // A running head. top is where the head image starts (from its <defs>
   // entry), so the thought bubble sits just above it.
@@ -1066,6 +1068,7 @@
   if (COWORKER) coEl.hidden = false;
 
   let routeFor = null;
+  let coRouteFor = null;
   let lastKey = "";
   let lastSpeedAt = 0;
   let lastDebtAt = 0;
@@ -1143,22 +1146,30 @@
     return ASIDE * (t < end ? ease(t - start) : ease(end - start) * (1 - ease(t - end)));
   }
 
+  // Draws or clears a run's dotted path. Returns the plan now shown, if any.
+  function showRoute(path, s, shown) {
+    if (s.moving && shown !== s.p) {
+      path.setAttribute("d", pathD(s.p.route));
+      return s.p;
+    }
+    if (!s.moving && shown) {
+      path.setAttribute("d", "");
+      return null;
+    }
+    return shown;
+  }
+
   function draw(t) {
     const s = stateAt(t);
     const p = s.p;
     const still = reduceMotion.matches;
     moveRunner(blake, s, t, PLACES);
-    if (s.moving && routeFor !== p) {
-      routeEl.setAttribute("d", pathD(p.route));
-      routeFor = p;
-    } else if (!s.moving && routeFor) {
-      routeEl.setAttribute("d", "");
-      routeFor = null;
-    }
+    routeFor = showRoute(routeEl, s, routeFor);
 
     if (COWORKER) {
       const cs = coTime.stateAt(t);
       moveRunner(coRunner, cs, t, CO_PLACES, stepAside(s, cs, t));
+      coRouteFor = showRoute(coRouteEl, cs, coRouteFor);
       const cw = wordsFor(cs, t, CO_PLACES, COWORKER.name);
       if (cw.key !== lastCoKey) {
         lastCoKey = cw.key;
