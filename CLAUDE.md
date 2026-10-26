@@ -20,6 +20,10 @@ Places live in the `LOCATIONS` array at the top of the script, and most requests
 
 The owner writes some of the jokes themselves. Leave their wording alone unless asked, even where it looks like a typo.
 
+## Temporary: a coworker
+
+A coworker runs around the map at the same time as Blake. The `COWORKER` block in the script, just after the constants, holds his name and his own places, which work like `LOCATIONS`. His head is `<image id="co-head">` in the map's `<defs>`. He gets his own schedule from `timeline()`, his own pins, and a one-sentence status under Blake's stats. While he's on, "Recent sightings" shows three entries instead of four, so the desktop page still fits without scrolling. Set `COWORKER` to `null` to turn him off; the page is then exactly what it was without him. `tools/check.js` only checks Blake.
+
 ## How the rest works
 
 The map is an SVG that the script draws in city-block coordinates. `S` is the number of SVG units per block, and `px()` and `py()` convert block coordinates to SVG coordinates. It's a cartoon, and the geography is approximate on purpose. It shows:

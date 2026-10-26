@@ -243,6 +243,17 @@
     font-variant-numeric: tabular-nums;
   }
 
+  /* Temporary: the coworker's status, under Blake's */
+  .co {
+    margin: clamp(14px, 2vw, 18px) 0 0;
+    padding-top: 10px;
+    border-top: 1px solid var(--rule);
+    font-size: 1.05rem;
+    font-weight: 800;
+    line-height: 1.25;
+  }
+  .co span { font-weight: 400; }
+
   /* Sightings */
   .log { grid-area: log; }
   .log h2 {
@@ -310,6 +321,8 @@
       <defs>
         <!-- Blake's head, cut out of his photo. This is what runs around the map. -->
         <image id="blake-head" x="-12.7" y="-37" width="25.4" height="38" href="data:image/webp;base64,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"/>
+        <!-- Temporary: the coworker's head, cut out of his photo. See COWORKER in the script. -->
+        <image id="co-head" x="-12.5" y="-41" width="25" height="42" href="data:image/webp;base64,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"/>
       </defs>
     </svg>
   </figure>
@@ -323,6 +336,7 @@
       <div><dt id="k2">Accuracy</dt><dd id="v2">…</dd></div>
       <div class="wide" id="r3" hidden><dt id="k3">Money Lost</dt><dd id="v3">…</dd></div>
     </dl>
+    <p class="co" id="co" hidden></p>
   </section>
 
   <section class="log" aria-labelledby="log-title">
@@ -504,11 +518,64 @@
   const RUN_VERBS = ["sprinting to", "booking it to", "hustling over to", "running to", "racing to"];
   const ACCURACY = ["± 6 ft", "± 15 ft", "± 40 ft", "± 0.3 mi", "± 2 mi", "± 3 mi", "Somewhere in Cache Valley"];
 
-  const PLACES = LOCATIONS.map(l => Object.assign({ here: [`at ${l.phrase}`] }, l, { x: l.east / 100, y: l.north / 100 }));
+  /* ---------- Temporary: a coworker runs around too ----------
+     While COWORKER is set, a second head (#co-head in the map's <defs>) runs
+     between his own places at the same time as Blake, and a one-sentence
+     status for him shows up under Blake's. Set COWORKER to null to turn him
+     off. His places work just like LOCATIONS. */
+  const COWORKER = {
+    name: "Blake’s coworker",
+    places: [
+      {
+        name: "IT Service Desk",
+        phrase: "the IT service desk",
+        address: "USU campus, Logan, UT",
+        north: 600,
+        east: 1350,
+        icon: "🥤",
+        labelSide: "left",
+        here: ["at the IT service desk", "behind the IT service desk", "back at the IT service desk", "definitely at the IT service desk", "probably at the IT service desk"],
+        activities: [
+          "Doing absolutely nothing",
+          "Drinking coke"
+        ]
+      },
+      {
+        name: "Maverik Stadium",
+        phrase: "the stadium",
+        address: "USU’s football stadium, Logan, UT",
+        north: 1230,
+        east: 950,
+        icon: "🏈",
+        labelSide: "left",
+        here: ["at the stadium", "under the bleachers at the stadium", "in the press box", "back at the stadium", "definitely at the stadium", "probably at the stadium"],
+        activities: [
+          "Pulling network cable"
+        ]
+      },
+      {
+        name: "His House",
+        phrase: "his house",
+        address: "somewhere south of Logan",
+        north: -1150,
+        east: 1000,
+        icon: "🐕",
+        labelSide: "right",
+        here: ["at home", "in his backyard", "back at his house", "definitely at home", "probably at home"],
+        activities: [
+          "Chasing after his dogs"
+        ]
+      }
+    ]
+  };
+
+  const toPlace = l => Object.assign({ here: [`at ${l.phrase}`] }, l, { x: l.east / 100, y: l.north / 100 });
+  const PLACES = LOCATIONS.map(toPlace);
+  const CO_PLACES = COWORKER ? COWORKER.places.map(toPlace) : [];
 
   /* ---------- Map frame, in city blocks ---------- */
-  const xs = PLACES.map(p => p.x);
-  const ys = PLACES.map(p => p.y);
+  const xs = PLACES.concat(CO_PLACES).map(p => p.x);
+  const ys = PLACES.concat(CO_PLACES).map(p => p.y);
   const B = {
     minX: Math.floor(Math.min(0, ...xs) - 5),
     maxX: Math.max(12, ...xs) + 6.5,
@@ -537,7 +604,6 @@
     }
   }
   const SEED = visitorSeed();
-  const PHASE = SEED % SLOT_MS;
 
   function mix(a, b) {
     let h = (a ^ Math.imul(b ^ 0x9e3779b9, 0x85ebca6b)) >>> 0;
@@ -672,100 +738,109 @@
   /* ---------- Blake's timeline ----------
      Where he is at each chunk boundary is picked at random; whatever happens
      inside a chunk is worked out from that. Same visitor, same Blake, even
-     after a refresh. */
-  const plans = new Map();
-  const slotOf = t => Math.floor((t + PHASE) / SLOT_MS);
-  const slotStart = k => k * SLOT_MS - PHASE;
-  const spotAt = k => Math.floor(rng(mix(SEED ^ 0x5bd1e995, k))() * PLACES.length);
+     after a refresh. timeline() builds one for any list of places and seed,
+     so someone else can run around too. */
+  function timeline(places, seed) {
+    const phase = seed % SLOT_MS;
+    const plans = new Map();
+    const slotOf = t => Math.floor((t + phase) / SLOT_MS);
+    const slotStart = k => k * SLOT_MS - phase;
+    const spotAt = k => Math.floor(rng(mix(seed ^ 0x5bd1e995, k))() * places.length);
 
-  function plan(k) {
-    if (plans.has(k)) return plans.get(k);
-    if (plans.size > 600) plans.clear();
-    const r = rng(mix(SEED, k));
-    const p = { k, from: spotAt(k), to: spotAt(k + 1), kind: "stay" };
-    let route = null;
-    let speed = 0;
-    if (p.from !== p.to) {
-      p.kind = r() < 0.2 ? "scenic" : "run";
-      route = buildRoute(PLACES[p.from], PLACES[p.to], r, p.kind === "scenic");
-      speed = lerp(2.3, 3.3, r());
-      p.verb = pick(r, RUN_VERBS);
-    } else if (PLACES.length > 1) {
-      const roll = r();
-      if (roll < 0.3) {
-        p.kind = "forgot";
-        let other = Math.floor(r() * (PLACES.length - 1));
-        if (other >= p.from) other++;
-        p.toward = other;
-        const full = buildRoute(PLACES[p.from], PLACES[other], r, false);
-        const fullCum = measure(full);
-        p.fullLen = fullCum[fullCum.length - 1];
-        const out = slicePath(full, fullCum, p.fullLen * lerp(0.18, 0.45, r()));
-        p.turn = out[out.length - 1];
-        route = out.concat(out.slice(0, -1).reverse());
+    function plan(k) {
+      if (plans.has(k)) return plans.get(k);
+      if (plans.size > 600) plans.clear();
+      const r = rng(mix(seed, k));
+      const p = { k, from: spotAt(k), to: spotAt(k + 1), kind: "stay" };
+      let route = null;
+      let speed = 0;
+      if (p.from !== p.to) {
+        p.kind = r() < 0.2 ? "scenic" : "run";
+        route = buildRoute(places[p.from], places[p.to], r, p.kind === "scenic");
         speed = lerp(2.3, 3.3, r());
-      } else if (roll < 0.48) {
-        p.kind = "laps";
-        const laps = buildLaps(PLACES[p.from], r);
-        route = laps.route;
-        p.laps = laps.laps;
-        speed = lerp(1.3, 1.8, r());
+        p.verb = pick(r, RUN_VERBS);
+      } else if (places.length > 1) {
+        const roll = r();
+        if (roll < 0.3) {
+          p.kind = "forgot";
+          let other = Math.floor(r() * (places.length - 1));
+          if (other >= p.from) other++;
+          p.toward = other;
+          const full = buildRoute(places[p.from], places[other], r, false);
+          const fullCum = measure(full);
+          p.fullLen = fullCum[fullCum.length - 1];
+          const out = slicePath(full, fullCum, p.fullLen * lerp(0.18, 0.45, r()));
+          p.turn = out[out.length - 1];
+          route = out.concat(out.slice(0, -1).reverse());
+          speed = lerp(2.3, 3.3, r());
+        } else if (roll < 0.48) {
+          p.kind = "laps";
+          const laps = buildLaps(places[p.from], r);
+          route = laps.route;
+          p.laps = laps.laps;
+          speed = lerp(1.3, 1.8, r());
+        }
       }
-    }
-    if (route) {
-      const cum = measure(route);
-      const len = cum[cum.length - 1];
-      if (len < 0.01) {
-        p.kind = "stay";
-      } else {
-        p.route = route;
-        p.cum = cum;
-        p.len = len;
-        const dur = Math.min(Math.max((len / speed) * 1000, 4500), SLOT_MS - 2500);
-        p.start = slotStart(k) + lerp(1000, SLOT_MS - dur - 1000, r());
-        p.end = p.start + dur;
-        p.msPerBlock = dur / len;
-        p.mph = (len * MILES_PER_BLOCK) / (dur / 3600000);
-        p.moveAccuracy = pick(r, ACCURACY);
-        if (p.kind === "run" || p.kind === "scenic") {
-          // A street corner along the way, not right next to either end
-          const corners = [];
-          for (let i = 1; i < route.length - 1; i++) {
-            if (isInt(route[i][0]) && isInt(route[i][1]) && cum[i] > 1.5 && cum[i] < len - 1.5) corners.push(i);
-          }
-          if (corners.length) {
-            const i = pick(r, corners);
-            p.spotted = { x: route[i][0], y: route[i][1], d: cum[i] };
-          } else {
-            const mid = pointAt(route, cum, len / 2);
-            p.spotted = { x: mid.x, y: mid.y, d: len / 2 };
+      if (route) {
+        const cum = measure(route);
+        const len = cum[cum.length - 1];
+        if (len < 0.01) {
+          p.kind = "stay";
+        } else {
+          p.route = route;
+          p.cum = cum;
+          p.len = len;
+          const dur = Math.min(Math.max((len / speed) * 1000, 4500), SLOT_MS - 2500);
+          p.start = slotStart(k) + lerp(1000, SLOT_MS - dur - 1000, r());
+          p.end = p.start + dur;
+          p.msPerBlock = dur / len;
+          p.mph = (len * MILES_PER_BLOCK) / (dur / 3600000);
+          p.moveAccuracy = pick(r, ACCURACY);
+          if (p.kind === "run" || p.kind === "scenic") {
+            // A street corner along the way, not right next to either end
+            const corners = [];
+            for (let i = 1; i < route.length - 1; i++) {
+              if (isInt(route[i][0]) && isInt(route[i][1]) && cum[i] > 1.5 && cum[i] < len - 1.5) corners.push(i);
+            }
+            if (corners.length) {
+              const i = pick(r, corners);
+              p.spotted = { x: route[i][0], y: route[i][1], d: cum[i] };
+            } else {
+              const mid = pointAt(route, cum, len / 2);
+              p.spotted = { x: mid.x, y: mid.y, d: len / 2 };
+            }
           }
         }
       }
+      // What he gets up to once he's at p.to
+      p.here = pick(r, places[p.to].here);
+      p.activity = pick(r, places[p.to].activities);
+      p.accuracy = pick(r, ACCURACY);
+      plans.set(k, p);
+      return p;
     }
-    // What he gets up to once he's at p.to
-    p.here = pick(r, PLACES[p.to].here);
-    p.activity = pick(r, PLACES[p.to].activities);
-    p.accuracy = pick(r, ACCURACY);
-    plans.set(k, p);
-    return p;
+
+    function lastArrival(t) {
+      let k = slotOf(t);
+      for (let i = 0; i < 120; i++, k--) {
+        const p = plan(k);
+        if (p.kind !== "stay" && p.end <= t) return p;
+      }
+      return plan(slotOf(t));
+    }
+
+    function stateAt(t) {
+      const p = plan(slotOf(t));
+      if (p.kind !== "stay" && t >= p.start && t < p.end) return { moving: true, p };
+      const a = lastArrival(t);
+      return { moving: false, p: a, place: a.to, since: a.end !== undefined ? a.end : slotStart(a.k) };
+    }
+
+    return { plan, slotOf, slotStart, stateAt };
   }
 
-  function lastArrival(t) {
-    let k = slotOf(t);
-    for (let i = 0; i < 120; i++, k--) {
-      const p = plan(k);
-      if (p.kind !== "stay" && p.end <= t) return p;
-    }
-    return plan(slotOf(t));
-  }
-
-  function stateAt(t) {
-    const p = plan(slotOf(t));
-    if (p.kind !== "stay" && t >= p.start && t < p.end) return { moving: true, p };
-    const a = lastArrival(t);
-    return { moving: false, p: a, place: a.to, since: a.end !== undefined ? a.end : slotStart(a.k) };
-  }
+  const { plan, slotOf, slotStart, stateAt } = timeline(PLACES, SEED);
+  const coTime = COWORKER ? timeline(CO_PLACES, mix(SEED, 0xc0ffee)) : null;
 
   /* ---------- Words ---------- */
   const streetX = x => {
@@ -844,37 +919,37 @@
     return `${Math.round(p.mph * wobble).toLocaleString()} mph`;
   }
 
-  function wordsFor(s, t) {
+  function wordsFor(s, t, places = PLACES, who = "Blake") {
     const p = s.p;
     if (!s.moving) {
       const stats = [["Currently", p.activity], ["Here since", fmt(s.since)], ["Accuracy", p.accuracy]];
-      if (PLACES[s.place].debt) stats.push(["Money Lost", debtText(t)]);
+      if (places[s.place].debt) stats.push(["Money Lost", debtText(t)]);
       return {
         key: `here-${p.k}-${s.place}`,
-        line: `Blake is ${p.here}.`,
+        line: `${who} is ${p.here}.`,
         stats
       };
     }
-    const from = PLACES[p.from];
-    const to = PLACES[p.to];
+    const from = places[p.from];
+    const to = places[p.to];
     let key = `move-${p.k}`;
     let eta = p.end;
     let line;
     if (p.kind === "scenic") {
-      line = `Blake is taking the scenic route to ${to.phrase}.`;
+      line = `${who} is taking the scenic route to ${to.phrase}.`;
     } else if (p.kind === "laps") {
-      line = "Blake is running laps around the block.";
+      line = `${who} is running laps around the block.`;
     } else if (p.kind === "forgot") {
       const turned = t >= p.start + (p.len / 2) * p.msPerBlock;
       key += turned ? "-back" : "-out";
       if (turned) {
-        line = `Blake forgot something. Heading back to ${from.phrase}.`;
+        line = `${who} forgot something. Heading back to ${from.phrase}.`;
       } else {
-        line = `Blake is heading to ${PLACES[p.toward].phrase}.`;
+        line = `${who} is heading to ${places[p.toward].phrase}.`;
         eta = p.start + p.fullLen * p.msPerBlock;
       }
     } else {
-      line = `Blake is ${p.verb} ${to.phrase}.`;
+      line = `${who} is ${p.verb} ${to.phrase}.`;
     }
     return { key, line, stats: [["Speed, on foot", speedText(p, t)], ["ETA", fmt(eta)], ["Accuracy", p.moveAccuracy]] };
   }
@@ -949,7 +1024,7 @@
   el("text", { class: "lbl lbl-north", x: nx, y: ny + 20, "text-anchor": "middle" }, labels, "N");
 
   const spots = el("g", {}, svg);
-  PLACES.forEach(place => {
+  PLACES.concat(CO_PLACES).forEach(place => {
     const g = el("g", { transform: `translate(${pt(place.x, place.y)})` }, spots);
     el("title", {}, g, `${place.name}, ${place.address}`);
     el("circle", { class: "spot-ring", r: 8 }, g);
@@ -959,14 +1034,23 @@
   });
 
   const routeEl = el("path", { class: "route", d: "" }, svg);
-  const runner = el("g", {}, svg);
-  const shadow = el("ellipse", { class: "shadow", cx: 0, cy: 0, rx: 10.5, ry: 3.8 }, runner);
-  const body = el("g", {}, runner);
-  const head = el("use", { href: "#blake-head" }, body);
-  const bubble = el("g", {}, runner);
-  el("rect", { class: "bubble-box", x: -14, y: -72, width: 28, height: 23, rx: 8 }, bubble);
-  el("path", { class: "bubble-box", d: "M -4 -49.8 L 0 -43.5 L 4 -49.8" }, bubble);
-  const bubbleIcon = el("text", { class: "emoji", x: 0, y: -55.6, "font-size": 15, "text-anchor": "middle" }, bubble, "");
+
+  // A running head. top is where the head image starts (from its <defs>
+  // entry), so the thought bubble sits just above it.
+  function makeRunner(headId, top) {
+    const R = { facing: -1 };   // which way he's running: 1 is east, -1 is west
+    R.g = el("g", {}, svg);
+    R.shadow = el("ellipse", { class: "shadow", cx: 0, cy: 0, rx: 10.5, ry: 3.8 }, R.g);
+    R.body = el("g", {}, R.g);
+    R.head = el("use", { href: `#${headId}` }, R.body);
+    R.bubble = el("g", {}, R.g);
+    el("rect", { class: "bubble-box", x: -14, y: top - 35, width: 28, height: 23, rx: 8 }, R.bubble);
+    el("path", { class: "bubble-box", d: `M -4 ${top - 12.8} L 0 ${top - 6.5} L 4 ${top - 12.8}` }, R.bubble);
+    R.icon = el("text", { class: "emoji", x: 0, y: top - 18.6, "font-size": 15, "text-anchor": "middle" }, R.bubble, "");
+    return R;
+  }
+  const coRunner = COWORKER ? makeRunner("co-head", -41) : null;   // under Blake, who's the star
+  const blake = makeRunner("blake-head", -37);
 
   /* ---------- Run ---------- */
   const statusEl = document.getElementById("status");
@@ -974,20 +1058,22 @@
   const valEls = [0, 1, 2, 3].map(i => document.getElementById("v" + i));
   const extraRow = document.getElementById("r3");
   const logEl = document.getElementById("log");
+  const coEl = document.getElementById("co");
   const reduceMotion = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : { matches: false };
+  if (COWORKER) coEl.hidden = false;
 
-  let facing = -1;      // which way he's running: 1 is east, -1 is west
   let routeFor = null;
   let lastKey = "";
   let lastSpeedAt = 0;
   let lastDebtAt = 0;
   let lastLogAt = 0;
   let lastLogSig = "";
+  let lastCoKey = "";
 
   const pathD = route => route.map(([x, y], i) => `${i ? "L" : "M"}${pt(x, y)}`).join(" ");
 
   function renderLog(t) {
-    const evs = recentEvents(t, 4);
+    const evs = recentEvents(t, COWORKER ? 3 : 4);   // one fewer, to make room for the coworker
     const sig = evs.map(e => e.t + e.text).join("|");
     if (sig === lastLogSig) return;
     lastLogSig = sig;
@@ -1003,8 +1089,7 @@
     }));
   }
 
-  function draw(t) {
-    const s = stateAt(t);
+  function moveRunner(R, s, t, places) {
     const p = s.p;
     const still = reduceMotion.matches;
     let x;
@@ -1013,34 +1098,59 @@
       const at = pointAt(p.route, p.cum, ((t - p.start) / (p.end - p.start)) * p.len);
       x = at.x;
       y = at.y;
-      if (at.dx > 1e-6) facing = 1;
-      else if (at.dx < -1e-6) facing = -1;
-      if (routeFor !== p) {
-        routeEl.setAttribute("d", pathD(p.route));
-        routeFor = p;
-      }
+      if (at.dx > 1e-6) R.facing = 1;
+      else if (at.dx < -1e-6) R.facing = -1;
     } else {
-      x = PLACES[s.place].x;
-      y = PLACES[s.place].y;
-      if (routeFor) {
-        routeEl.setAttribute("d", "");
-        routeFor = null;
-      }
+      x = places[s.place].x;
+      y = places[s.place].y;
     }
 
     const bob = s.moving && !still ? -Math.abs(Math.sin(t / 90)) * 3.4 : 0;
     // Running, he leans into it and his head wobbles with each step
-    const tilt = s.moving ? facing * 9 + (still ? 0 : Math.sin(t / 90) * 5) : 0;
-    runner.setAttribute("transform", `translate(${pt(x, y)})`);
-    body.setAttribute("transform", `translate(0,${bob.toFixed(2)})`);
-    head.setAttribute("transform", `rotate(${tilt.toFixed(1)} 0 1)`);
-    shadow.setAttribute("rx", (10.5 + bob * 0.5).toFixed(2));
+    const tilt = s.moving ? R.facing * 9 + (still ? 0 : Math.sin(t / 90) * 5) : 0;
+    R.g.setAttribute("transform", `translate(${pt(x, y)})`);
+    R.body.setAttribute("transform", `translate(0,${bob.toFixed(2)})`);
+    R.head.setAttribute("transform", `rotate(${tilt.toFixed(1)} 0 1)`);
+    R.shadow.setAttribute("rx", (10.5 + bob * 0.5).toFixed(2));
 
-    bubble.style.display = s.moving ? "none" : "";
+    R.bubble.style.display = s.moving ? "none" : "";
     if (!s.moving) {
-      const icon = PLACES[s.place].icon;
-      if (bubbleIcon.textContent !== icon) bubbleIcon.textContent = icon;
-      bubble.setAttribute("transform", `translate(0,${still ? 0 : (Math.sin(t / 650) * 1.6).toFixed(2)})`);
+      const icon = places[s.place].icon;
+      if (R.icon.textContent !== icon) R.icon.textContent = icon;
+      R.bubble.setAttribute("transform", `translate(0,${still ? 0 : (Math.sin(t / 650) * 1.6).toFixed(2)})`);
+    }
+  }
+
+  function draw(t) {
+    const s = stateAt(t);
+    const p = s.p;
+    const still = reduceMotion.matches;
+    moveRunner(blake, s, t, PLACES);
+    if (s.moving && routeFor !== p) {
+      routeEl.setAttribute("d", pathD(p.route));
+      routeFor = p;
+    } else if (!s.moving && routeFor) {
+      routeEl.setAttribute("d", "");
+      routeFor = null;
+    }
+
+    if (COWORKER) {
+      const cs = coTime.stateAt(t);
+      moveRunner(coRunner, cs, t, CO_PLACES);
+      const cw = wordsFor(cs, t, CO_PLACES, COWORKER.name);
+      if (cw.key !== lastCoKey) {
+        lastCoKey = cw.key;
+        if (cs.moving) {
+          coEl.replaceChildren(cw.line);
+        } else {
+          // One sentence: "… is in the press box, pulling network cable."
+          let what = cs.p.activity;
+          if (/^[A-Z][a-z]/.test(what)) what = what[0].toLowerCase() + what.slice(1);
+          const span = document.createElement("span");
+          span.textContent = what;
+          coEl.replaceChildren(`${cw.line.slice(0, -1)}, `, span, /[.!?”"]$/.test(what) ? "" : ".");
+        }
+      }
     }
 
     const words = wordsFor(s, t);
