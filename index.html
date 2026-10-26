@@ -527,14 +527,15 @@
     name: "Blake’s coworker",
     places: [
       {
-        name: "IT Service Desk",
-        phrase: "the IT service desk",
-        address: "USU campus, Logan, UT",
-        north: 600,
-        east: 1350,
+        // Same spot as Blake's IT Building, so they share its pin
+        name: "IT Building",
+        phrase: "the office",
+        address: "820 N 1200 E, Logan, UT 84322",
+        north: 820,
+        east: 1200,
         icon: "🥤",
         labelSide: "left",
-        here: ["at the IT service desk", "behind the IT service desk", "back at the IT service desk", "definitely at the IT service desk", "probably at the IT service desk"],
+        here: ["at the office", "in the office", "back at the office", "definitely at the office", "probably at the office"],
         activities: [
           "Doing absolutely nothing",
           "Drinking coke"
@@ -572,6 +573,8 @@
   const toPlace = l => Object.assign({ here: [`at ${l.phrase}`] }, l, { x: l.east / 100, y: l.north / 100 });
   const PLACES = LOCATIONS.map(toPlace);
   const CO_PLACES = COWORKER ? COWORKER.places.map(toPlace) : [];
+  // For each of his places, the index of Blake's place at the same spot, or -1
+  const CO_SHARED = CO_PLACES.map(c => PLACES.findIndex(b => b.x === c.x && b.y === c.y));
 
   /* ---------- Map frame, in city blocks ---------- */
   const xs = PLACES.concat(CO_PLACES).map(p => p.x);
@@ -1024,7 +1027,7 @@
   el("text", { class: "lbl lbl-north", x: nx, y: ny + 20, "text-anchor": "middle" }, labels, "N");
 
   const spots = el("g", {}, svg);
-  PLACES.concat(CO_PLACES).forEach(place => {
+  PLACES.concat(CO_PLACES.filter((c, i) => CO_SHARED[i] < 0)).forEach(place => {
     const g = el("g", { transform: `translate(${pt(place.x, place.y)})` }, spots);
     el("title", {}, g, `${place.name}, ${place.address}`);
     el("circle", { class: "spot-ring", r: 8 }, g);
@@ -1089,7 +1092,8 @@
     }));
   }
 
-  function moveRunner(R, s, t, places) {
+  // dx shifts him sideways on screen, in map units (see stepAside)
+  function moveRunner(R, s, t, places, dx = 0) {
     const p = s.p;
     const still = reduceMotion.matches;
     let x;
@@ -1108,7 +1112,7 @@
     const bob = s.moving && !still ? -Math.abs(Math.sin(t / 90)) * 3.4 : 0;
     // Running, he leans into it and his head wobbles with each step
     const tilt = s.moving ? R.facing * 9 + (still ? 0 : Math.sin(t / 90) * 5) : 0;
-    R.g.setAttribute("transform", `translate(${pt(x, y)})`);
+    R.g.setAttribute("transform", `translate(${(px(x) + dx).toFixed(1)},${py(y).toFixed(1)})`);
     R.body.setAttribute("transform", `translate(0,${bob.toFixed(2)})`);
     R.head.setAttribute("transform", `rotate(${tilt.toFixed(1)} 0 1)`);
     R.shadow.setAttribute("rx", (10.5 + bob * 0.5).toFixed(2));
@@ -1119,6 +1123,24 @@
       if (R.icon.textContent !== icon) R.icon.textContent = icon;
       R.bubble.setAttribute("transform", `translate(0,${still ? 0 : (Math.sin(t / 650) * 1.6).toFixed(2)})`);
     }
+  }
+
+  // When the coworker and Blake are stopped at the same place, the coworker
+  // steps aside so both heads show. He eases over when the second one
+  // arrives, and back when either leaves.
+  const ASIDE = 31;      // map units: enough that their thought bubbles don't touch
+  const ASIDE_MS = 400;
+  function stepAside(s, cs, t) {
+    const ease = ms => Math.min(1, Math.max(0, ms / ASIDE_MS));
+    // Where each of them last stood still, and since when
+    const b = s.moving ? stateAt(s.p.start - 1) : s;
+    const c = cs.moving ? coTime.stateAt(cs.p.start - 1) : cs;
+    if (b.moving || c.moving || CO_SHARED[c.place] !== b.place) return 0;
+    // They were together from the later arrival until the earlier departure
+    const start = Math.max(b.since, c.since);
+    const end = Math.min(s.moving ? s.p.start : Infinity, cs.moving ? cs.p.start : Infinity);
+    if (start >= end) return 0;
+    return ASIDE * (t < end ? ease(t - start) : ease(end - start) * (1 - ease(t - end)));
   }
 
   function draw(t) {
@@ -1136,7 +1158,7 @@
 
     if (COWORKER) {
       const cs = coTime.stateAt(t);
-      moveRunner(coRunner, cs, t, CO_PLACES);
+      moveRunner(coRunner, cs, t, CO_PLACES, stepAside(s, cs, t));
       const cw = wordsFor(cs, t, CO_PLACES, COWORKER.name);
       if (cw.key !== lastCoKey) {
         lastCoKey = cw.key;

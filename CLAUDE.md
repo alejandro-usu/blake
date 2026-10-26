@@ -22,7 +22,7 @@ The owner writes some of the jokes themselves. Leave their wording alone unless 
 
 ## Temporary: a coworker
 
-A coworker runs around the map at the same time as Blake. The `COWORKER` block in the script, just after the constants, holds his name and his own places, which work like `LOCATIONS`. His head is `<image id="co-head">` in the map's `<defs>`. He gets his own schedule from `timeline()`, his own pins, and a one-sentence status under Blake's stats. While he's on, "Recent sightings" shows three entries instead of four, so the desktop page still fits without scrolling. Set `COWORKER` to `null` to turn him off; the page is then exactly what it was without him. `tools/check.js` only checks Blake.
+A coworker runs around the map at the same time as Blake. The `COWORKER` block in the script, just after the constants, holds his name and his own places, which work like `LOCATIONS`. His head is `<image id="co-head">` in the map's `<defs>`. He gets his own schedule from `timeline()`, his own pins, and a one-sentence status under Blake's stats. A place of his at the same north/east as one of Blake's (his office is Blake's IT Building) shares Blake's pin, and when they're both standing there he steps aside (`stepAside()`) so both heads show. While he's on, "Recent sightings" shows three entries instead of four, so the desktop page still fits without scrolling. Set `COWORKER` to `null` to turn him off; the page is then exactly what it was without him. `tools/check.js` only checks Blake.
 
 ## How the rest works
 
