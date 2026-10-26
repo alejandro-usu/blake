@@ -141,6 +141,12 @@
     gap: 0.5em;
     font-size: 0.9rem;
     font-weight: 700;
+    /* "Live" is secretly the coworker switch (five quick clicks), so rapid
+       clicks or taps mustn't select it, flash it or zoom the page. */
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
   .dot {
     position: relative;
@@ -312,7 +318,7 @@
 <main class="page">
   <header class="bar">
     <h1 class="wordmark">Where’s Blake?</h1>
-    <p class="live"><span class="dot" aria-hidden="true"></span>Live</p>
+    <p class="live" id="live"><span class="dot" aria-hidden="true"></span>Live</p>
   </header>
 
   <figure class="map">
@@ -522,7 +528,8 @@
      While COWORKER is set, a second head (#co-head in the map's <defs>) runs
      between his own places at the same time as Blake, and a one-sentence
      status for him shows up under Blake's. Set COWORKER to null to turn him
-     off. His places work just like LOCATIONS. */
+     off for everyone. Five quick clicks on "Live" turn him off (or back on)
+     in just that browser. His places work just like LOCATIONS. */
   const COWORKER = {
     name: "Blake’s coworker",
     places: [
@@ -570,9 +577,18 @@
     ]
   };
 
+  // The hidden switch's setting for this browser. CO is the coworker if he's
+  // on here, or null.
+  const CO_SWITCH = "wheres-blake-coworker";
+  function coSwitchedOff() {
+    try { return localStorage.getItem(CO_SWITCH) === "off"; }
+    catch (e) { return false; }
+  }
+  const CO = COWORKER && !coSwitchedOff() ? COWORKER : null;
+
   const toPlace = l => Object.assign({ here: [`at ${l.phrase}`] }, l, { x: l.east / 100, y: l.north / 100 });
   const PLACES = LOCATIONS.map(toPlace);
-  const CO_PLACES = COWORKER ? COWORKER.places.map(toPlace) : [];
+  const CO_PLACES = CO ? CO.places.map(toPlace) : [];
   // For each of his places, the index of Blake's place at the same spot, or -1
   const CO_SHARED = CO_PLACES.map(c => PLACES.findIndex(b => b.x === c.x && b.y === c.y));
 
@@ -843,7 +859,7 @@
   }
 
   const { plan, slotOf, slotStart, stateAt } = timeline(PLACES, SEED);
-  const coTime = COWORKER ? timeline(CO_PLACES, mix(SEED, 0xc0ffee)) : null;
+  const coTime = CO ? timeline(CO_PLACES, mix(SEED, 0xc0ffee)) : null;
 
   /* ---------- Words ---------- */
   const streetX = x => {
@@ -1038,7 +1054,7 @@
 
   // The dotted path of a run, while it lasts. Both go under both heads.
   const routeEl = el("path", { class: "route", d: "" }, svg);
-  const coRouteEl = COWORKER ? el("path", { class: "route", d: "" }, svg) : null;
+  const coRouteEl = CO ? el("path", { class: "route", d: "" }, svg) : null;
 
   // A running head. top is where the head image starts (from its <defs>
   // entry), so the thought bubble sits just above it.
@@ -1054,7 +1070,7 @@
     R.icon = el("text", { class: "emoji", x: 0, y: top - 18.6, "font-size": 15, "text-anchor": "middle" }, R.bubble, "");
     return R;
   }
-  const coRunner = COWORKER ? makeRunner("co-head", -41) : null;   // under Blake, who's the star
+  const coRunner = CO ? makeRunner("co-head", -41) : null;   // under Blake, who's the star
   const blake = makeRunner("blake-head", -37);
 
   /* ---------- Run ---------- */
@@ -1065,7 +1081,24 @@
   const logEl = document.getElementById("log");
   const coEl = document.getElementById("co");
   const reduceMotion = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : { matches: false };
-  if (COWORKER) coEl.hidden = false;
+  if (CO) coEl.hidden = false;
+
+  // The hidden switch: five clicks on "Live", each within 0.7 s of the last,
+  // flip the coworker for this browser and reload. Nothing about "Live" looks
+  // clickable, on purpose.
+  if (COWORKER) {
+    let clicks = 0;
+    let lastClickAt = 0;
+    document.getElementById("live").onclick = () => {
+      const now = Date.now();
+      clicks = now - lastClickAt < 700 ? clicks + 1 : 1;
+      lastClickAt = now;
+      if (clicks < 5) return;
+      clicks = 0;
+      try { localStorage.setItem(CO_SWITCH, CO ? "off" : "on"); } catch (e) {}
+      location.reload();
+    };
+  }
 
   let routeFor = null;
   let coRouteFor = null;
@@ -1079,7 +1112,7 @@
   const pathD = route => route.map(([x, y], i) => `${i ? "L" : "M"}${pt(x, y)}`).join(" ");
 
   function renderLog(t) {
-    const evs = recentEvents(t, COWORKER ? 3 : 4);   // one fewer, to make room for the coworker
+    const evs = recentEvents(t, CO ? 3 : 4);   // one fewer, to make room for the coworker
     const sig = evs.map(e => e.t + e.text).join("|");
     if (sig === lastLogSig) return;
     lastLogSig = sig;
@@ -1166,11 +1199,11 @@
     moveRunner(blake, s, t, PLACES);
     routeFor = showRoute(routeEl, s, routeFor);
 
-    if (COWORKER) {
+    if (CO) {
       const cs = coTime.stateAt(t);
       moveRunner(coRunner, cs, t, CO_PLACES, stepAside(s, cs, t));
       coRouteFor = showRoute(coRouteEl, cs, coRouteFor);
-      const cw = wordsFor(cs, t, CO_PLACES, COWORKER.name);
+      const cw = wordsFor(cs, t, CO_PLACES, CO.name);
       if (cw.key !== lastCoKey) {
         lastCoKey = cw.key;
         if (cs.moving) {
