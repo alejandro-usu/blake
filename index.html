@@ -527,9 +527,10 @@
   /* ---------- Temporary: a coworker runs around too ----------
      While COWORKER is set, a second head (#co-head in the map's <defs>) runs
      between his own places at the same time as Blake, and a one-sentence
-     status for him shows up under Blake's. Set COWORKER to null to turn him
-     off for everyone. Five quick clicks on "Live" turn him off (or back on)
-     in just that browser. His places work just like LOCATIONS. */
+     status for him shows up under Blake's. He's off unless a browser turns
+     him on with the hidden switch: five quick clicks on "Live" (and five
+     more turn him back off). Set COWORKER to null to remove him for
+     everyone, switch and all. His places work just like LOCATIONS. */
   const COWORKER = {
     name: "Blake’s coworker",
     places: [
@@ -577,14 +578,14 @@
     ]
   };
 
-  // The hidden switch's setting for this browser. CO is the coworker if he's
-  // on here, or null.
+  // The hidden switch's setting for this browser; he's off by default. CO is
+  // the coworker if he's on here, or null.
   const CO_SWITCH = "wheres-blake-coworker";
-  function coSwitchedOff() {
-    try { return localStorage.getItem(CO_SWITCH) === "off"; }
+  function coSwitchedOn() {
+    try { return localStorage.getItem(CO_SWITCH) === "on"; }
     catch (e) { return false; }
   }
-  const CO = COWORKER && !coSwitchedOff() ? COWORKER : null;
+  const CO = COWORKER && coSwitchedOn() ? COWORKER : null;
 
   const toPlace = l => Object.assign({ here: [`at ${l.phrase}`] }, l, { x: l.east / 100, y: l.north / 100 });
   const PLACES = LOCATIONS.map(toPlace);
