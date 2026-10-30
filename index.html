@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-season="halloween">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -33,6 +33,8 @@
     --spot-ring: #000000;
     --shadow: rgba(0, 0, 0, 0.28);
     --frame: #000000;
+    --crow: #141414;
+    --crow-glow: transparent;
 
     --font: "Overpass", "Helvetica Neue", Helvetica, Arial, sans-serif;
     --emoji: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
@@ -63,6 +65,8 @@
       --spot-ring: #FFCD00;
       --shadow: rgba(0, 0, 0, 0.55);
       --frame: #FFCD00;
+      --crow: #0B0B0B;
+      --crow-glow: rgba(255, 205, 0, 0.8);
       color-scheme: dark;
     }
   }
@@ -86,6 +90,101 @@
     --spot-ring: #FFCD00;
     --shadow: rgba(0, 0, 0, 0.55);
     --frame: #FFCD00;
+    --crow: #0B0B0B;
+    --crow-glow: rgba(255, 205, 0, 0.8);
+    color-scheme: dark;
+  }
+
+  /* Halloween: on while <html> has data-season="halloween"; delete that
+     attribute to go back to road-sign yellow. Pumpkin orange by day, a
+     purple night in dark mode. Like above, the two dark blocks must stay
+     identical. */
+  :root[data-season="halloween"] {
+    --page: #FF8A1F;
+    --ink: #000000;
+    --ink-soft: #5A2600;
+    --rule: rgba(0, 0, 0, 0.22);
+    --live: #7B2CBF;
+    --land: #F1ECE2;
+    --street: #FFFFFF;
+    --road: #FF8A1F;
+    --road-edge: #C25E00;
+    --campus: #DCCDEB;
+    --hills: #D2C8DC;
+    --hills-line: #9A88AE;
+    --map-ink: #000000;
+    --route: #000000;
+    --spot-fill: #FFFFFF;
+    --spot-ring: #000000;
+    --shadow: rgba(0, 0, 0, 0.28);
+    --frame: #000000;
+    --crow: #141414;
+    --crow-glow: transparent;
+    --moon: #FFE9A8;
+    --moon-edge: #E0A030;
+    --hat: #1C1424;
+    --hat-band: #FF8A1F;
+    --hat-edge: #000000;
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root[data-season="halloween"]:not([data-theme="light"]) {
+      --page: #17111F;
+      --ink: #FF8A1F;
+      --ink-soft: #C9701E;
+      --rule: rgba(255, 138, 31, 0.25);
+      --live: #B07CFF;
+      --land: #241C2E;
+      --street: #352B40;
+      --road: #FF8A1F;
+      --road-edge: #7A3A00;
+      --campus: #3A2B4D;
+      --hills: #2B2336;
+      --hills-line: #5E4D73;
+      --map-ink: #EFE8F7;
+      --route: #FFFFFF;
+      --spot-fill: #17111F;
+      --spot-ring: #FF8A1F;
+      --shadow: rgba(0, 0, 0, 0.6);
+      --frame: #FF8A1F;
+      --crow: #0B0B0B;
+      --crow-glow: rgba(255, 138, 31, 0.8);
+      --moon: #F4E6B5;
+      --moon-edge: #F4E6B5;
+      --hat: #120D18;
+      --hat-band: #B07CFF;
+      --hat-edge: #FF8A1F;
+      color-scheme: dark;
+    }
+  }
+
+  :root[data-season="halloween"][data-theme="dark"] {
+    --page: #17111F;
+    --ink: #FF8A1F;
+    --ink-soft: #C9701E;
+    --rule: rgba(255, 138, 31, 0.25);
+    --live: #B07CFF;
+    --land: #241C2E;
+    --street: #352B40;
+    --road: #FF8A1F;
+    --road-edge: #7A3A00;
+    --campus: #3A2B4D;
+    --hills: #2B2336;
+    --hills-line: #5E4D73;
+    --map-ink: #EFE8F7;
+    --route: #FFFFFF;
+    --spot-fill: #17111F;
+    --spot-ring: #FF8A1F;
+    --shadow: rgba(0, 0, 0, 0.6);
+    --frame: #FF8A1F;
+    --crow: #0B0B0B;
+    --crow-glow: rgba(255, 138, 31, 0.8);
+    --moon: #F4E6B5;
+    --moon-edge: #F4E6B5;
+    --hat: #120D18;
+    --hat-band: #B07CFF;
+    --hat-edge: #FF8A1F;
     color-scheme: dark;
   }
 
@@ -191,6 +290,12 @@
   .campus { fill: var(--campus); stroke: var(--campus); stroke-width: 14px; stroke-linejoin: round; }
   .hills { fill: var(--hills); }
   .peak { fill: none; stroke: var(--hills-line); stroke-width: 2px; stroke-linecap: round; stroke-linejoin: round; }
+  /* Halloween extras: the moon and bats on the map, witch hats, a pumpkin */
+  .moon { fill: var(--moon); stroke: var(--moon-edge); stroke-width: 1.5px; }
+  .bat { fill: var(--crow); filter: drop-shadow(0 0 1.5px var(--crow-glow)); }
+  .hat { fill: var(--hat); stroke: var(--hat-edge); stroke-width: 0.8px; stroke-linejoin: round; }
+  .hat .hat-band { fill: var(--hat-band); stroke: none; }
+  :root[data-season="halloween"] .wordmark::after { content: "🎃"; margin-left: 0.3em; font-family: var(--emoji); }
   .lbl {
     fill: var(--map-ink);
     font-size: 12.5px;
@@ -309,8 +414,71 @@
     .status { min-height: 3.12em; }
   }
 
+  /* Crows fly around the whole screen while Blake is at a place with
+     crows: true (the corn patch). Clicks go right through them. */
+  .crows {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s, visibility 0.8s;
+  }
+  .crows.on { opacity: 1; visibility: visible; }
+  .crow {
+    position: absolute;
+    top: var(--top);
+    left: var(--left, 0);
+    animation: var(--path) var(--fly) linear var(--delay) infinite;
+  }
+  .crow svg {
+    display: block;
+    width: var(--size);
+    height: auto;
+    overflow: visible;
+    fill: var(--crow);
+    filter: drop-shadow(0 0 2px var(--crow-glow));
+    transform: scaleX(var(--dir, 1));   /* -1 faces west */
+  }
+  .crow .wings {
+    transform-origin: 24px 12px;
+    animation: crow-flap var(--flap) ease-in-out infinite alternate;
+  }
+  @keyframes crow-flap {
+    from { transform: scaleY(1); }
+    to { transform: scaleY(-0.45); }
+  }
+  @keyframes crow-east {
+    0% { transform: translate(-15vw, 0); }
+    25% { transform: translate(20vw, -4vh); }
+    50% { transform: translate(50vw, 3vh); }
+    75% { transform: translate(80vw, -3vh); }
+    100% { transform: translate(115vw, 0); }
+  }
+  @keyframes crow-west {
+    0% { transform: translate(115vw, 0); }
+    25% { transform: translate(80vw, 4vh); }
+    50% { transform: translate(50vw, -3vh); }
+    75% { transform: translate(20vw, 3vh); }
+    100% { transform: translate(-15vw, 0); }
+  }
+  @keyframes crow-circle {
+    0% { transform: translate(0, -14vmin); }
+    12.5% { transform: translate(14vmin, -10vmin); }
+    25% { transform: translate(20vmin, 0); }
+    37.5% { transform: translate(14vmin, 10vmin); }
+    50% { transform: translate(0, 14vmin); }
+    62.5% { transform: translate(-14vmin, 10vmin); }
+    75% { transform: translate(-20vmin, 0); }
+    87.5% { transform: translate(-14vmin, -10vmin); }
+    100% { transform: translate(0, -14vmin); }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .dot::after { animation: none; opacity: 0; }
+    .crows { display: none; }
   }
 </style>
 </head>
@@ -350,6 +518,15 @@
     <ol id="log"></ol>
   </section>
 </main>
+
+<div class="crows" id="crows" aria-hidden="true">
+  <div class="crow" style="--path: crow-east; --fly: 9s; --delay: -1s; --top: 12vh; --size: 64px; --flap: 0.4s"><svg viewBox="0 0 48 24"><path class="wings" d="M24 12 C20 3 11 1 3 4 C10 6 15 9 19 14 Z M24 12 C28 3 37 1 45 4 C38 6 33 9 29 14 Z"/><path d="M13 13 L7 10 L8.5 13.5 L7 17 Z M14 13.5 C14 11 18 10 24 10.3 C28 10.5 31 9.5 33 9.5 C35.5 9.5 37 10.8 37.5 12 L41.5 13 L37.5 14 C36.5 16 33 16.8 29 16.8 C21 17 14 16 14 13.5 Z"/></svg></div>
+  <div class="crow" style="--path: crow-east; --fly: 12s; --delay: -7s; --top: 58vh; --size: 52px; --flap: 0.34s"><svg viewBox="0 0 48 24"><path class="wings" d="M24 12 C20 3 11 1 3 4 C10 6 15 9 19 14 Z M24 12 C28 3 37 1 45 4 C38 6 33 9 29 14 Z"/><path d="M13 13 L7 10 L8.5 13.5 L7 17 Z M14 13.5 C14 11 18 10 24 10.3 C28 10.5 31 9.5 33 9.5 C35.5 9.5 37 10.8 37.5 12 L41.5 13 L37.5 14 C36.5 16 33 16.8 29 16.8 C21 17 14 16 14 13.5 Z"/></svg></div>
+  <div class="crow" style="--path: crow-west; --fly: 10s; --delay: -3s; --top: 34vh; --size: 58px; --dir: -1; --flap: 0.45s"><svg viewBox="0 0 48 24"><path class="wings" d="M24 12 C20 3 11 1 3 4 C10 6 15 9 19 14 Z M24 12 C28 3 37 1 45 4 C38 6 33 9 29 14 Z"/><path d="M13 13 L7 10 L8.5 13.5 L7 17 Z M14 13.5 C14 11 18 10 24 10.3 C28 10.5 31 9.5 33 9.5 C35.5 9.5 37 10.8 37.5 12 L41.5 13 L37.5 14 C36.5 16 33 16.8 29 16.8 C21 17 14 16 14 13.5 Z"/></svg></div>
+  <div class="crow" style="--path: crow-west; --fly: 14s; --delay: -10s; --top: 80vh; --size: 72px; --dir: -1; --flap: 0.5s"><svg viewBox="0 0 48 24"><path class="wings" d="M24 12 C20 3 11 1 3 4 C10 6 15 9 19 14 Z M24 12 C28 3 37 1 45 4 C38 6 33 9 29 14 Z"/><path d="M13 13 L7 10 L8.5 13.5 L7 17 Z M14 13.5 C14 11 18 10 24 10.3 C28 10.5 31 9.5 33 9.5 C35.5 9.5 37 10.8 37.5 12 L41.5 13 L37.5 14 C36.5 16 33 16.8 29 16.8 C21 17 14 16 14 13.5 Z"/></svg></div>
+  <div class="crow" style="--path: crow-circle; --fly: 7s; --delay: -2s; --top: 30vh; --left: 62vw; --size: 54px; --flap: 0.36s"><svg viewBox="0 0 48 24"><path class="wings" d="M24 12 C20 3 11 1 3 4 C10 6 15 9 19 14 Z M24 12 C28 3 37 1 45 4 C38 6 33 9 29 14 Z"/><path d="M13 13 L7 10 L8.5 13.5 L7 17 Z M14 13.5 C14 11 18 10 24 10.3 C28 10.5 31 9.5 33 9.5 C35.5 9.5 37 10.8 37.5 12 L41.5 13 L37.5 14 C36.5 16 33 16.8 29 16.8 C21 17 14 16 14 13.5 Z"/></svg></div>
+  <div class="crow" style="--path: crow-circle; --fly: 9s; --delay: -5s; --top: 55vh; --left: 28vw; --size: 48px; --dir: -1; --flap: 0.3s"><svg viewBox="0 0 48 24"><path class="wings" d="M24 12 C20 3 11 1 3 4 C10 6 15 9 19 14 Z M24 12 C28 3 37 1 45 4 C38 6 33 9 29 14 Z"/><path d="M13 13 L7 10 L8.5 13.5 L7 17 Z M14 13.5 C14 11 18 10 24 10.3 C28 10.5 31 9.5 33 9.5 C35.5 9.5 37 10.8 37.5 12 L41.5 13 L37.5 14 C36.5 16 33 16.8 29 16.8 C21 17 14 16 14 13.5 Z"/></svg></div>
+</div>
 
 <script>
 (() => {
@@ -522,9 +699,13 @@
       east: 1000,
       icon: "🌽",
       labelSide: "left",
+      crows: true,
+      weight: 4,   // Halloween: he picks it about 3x as often. Back to 1 (or delete this) after.
       here: ["at the corn patch", "somewhere in the corn patch", "lost in the corn patch", "hiding in the corn patch", "back at the corn patch", "definitely at the corn patch", "probably at the corn patch", "allegedly at the corn patch"],
       activities: [
-        "Running from black birds / crows"
+        "Running from crows",
+        "Eating candy corn",
+        "Flirting with witches"
       ]
     }
   ];
@@ -536,6 +717,8 @@
 
   const RUN_VERBS = ["sprinting to", "booking it to", "hustling over to", "running to", "racing to"];
   const ACCURACY = ["± 6 ft", "± 15 ft", "± 40 ft", "± 0.3 mi", "± 2 mi", "± 3 mi", "Somewhere in Cache Valley"];
+  // The Halloween theme is on while <html> has data-season="halloween"
+  const HALLOWEEN = document.documentElement.getAttribute?.("data-season") === "halloween";
 
   /* ---------- Temporary: a coworker runs around too ----------
      While COWORKER is set, a second head (#co-head in the map's <defs>) runs
@@ -778,7 +961,17 @@
     const plans = new Map();
     const slotOf = t => Math.floor((t + phase) / SLOT_MS);
     const slotStart = k => k * SLOT_MS - phase;
-    const spotAt = k => Math.floor(rng(mix(seed ^ 0x5bd1e995, k))() * places.length);
+    // Where he is at the start of slot k. A place with weight: 2 comes up
+    // twice as often as one without.
+    const cum = [];
+    let total = 0;
+    for (const p of places) cum.push(total += p.weight || 1);
+    const spotAt = k => {
+      const u = rng(mix(seed ^ 0x5bd1e995, k))() * total;
+      let i = 0;
+      while (u >= cum[i] && i < places.length - 1) i++;
+      return i;
+    };
 
     function plan(k) {
       if (plans.has(k)) return plans.get(k);
@@ -1038,6 +1231,15 @@
       el("path", { class: "peak", d: `M${pt(x - 0.42, y - 0.28)} L${pt(x, y + 0.34)} L${pt(x + 0.42, y - 0.28)}` }, base);
     });
 
+  // Halloween: a full moon over the foothills, and two bats
+  if (HALLOWEEN) {
+    el("circle", { class: "moon", cx: px(B.maxX - 2.3), cy: py(B.maxY - 2.1), r: 26 }, base);
+    const BAT = "M0 0 C-2 -2 -4 -2 -8 -4 C-7 -1 -7 1 -6 2 C-5 1 -4 1 -3 2 C-2 1 -1 1 0 2 C1 1 2 1 3 2 C4 1 5 1 6 2 C7 1 7 -1 8 -4 C4 -2 2 -2 0 0 Z";
+    for (const [x, y, size] of [[B.maxX - 4.4, B.maxY - 1.4, 1.3], [B.maxX - 3.6, B.maxY - 3.7, 1]]) {
+      el("path", { class: "bat", d: BAT, transform: `translate(${pt(x, y)}) scale(${size})` }, base);
+    }
+  }
+
   const labels = el("g", {}, svg);
   const label = (x, y, words, cls) => el("text", { class: cls || "lbl", x: px(x), y: py(y) }, labels, words);
   label(0.4, B.minY + 0.6, "Main St");
@@ -1077,7 +1279,17 @@
     R.g = el("g", {}, svg);
     R.shadow = el("ellipse", { class: "shadow", cx: 0, cy: 0, rx: 10.5, ry: 3.8 }, R.g);
     R.body = el("g", {}, R.g);
-    R.head = el("use", { href: `#${headId}` }, R.body);
+    R.head = el("g", {}, R.body);
+    el("use", { href: `#${headId}` }, R.head);
+    // Halloween: a crooked witch hat, its tip bent away from the thought
+    // bubble, which moves up a little to clear it
+    if (HALLOWEEN) {
+      const hat = el("g", { class: "hat", transform: `translate(0 ${top + 2})` }, R.head);
+      el("path", { d: "M -8 1.5 Q 0 -10 17 -8 Q 9 -4 10 1.5 Z" }, hat);
+      el("path", { class: "hat-band", d: "M -7.6 -0.6 Q 1 -3 9.8 -0.8 L 10 1.5 L -8 1.5 Z" }, hat);
+      el("ellipse", { cx: 1, cy: 2.2, rx: 14, ry: 2.6 }, hat);
+      top -= 6;
+    }
     R.bubble = el("g", {}, R.g);
     el("rect", { class: "bubble-box", x: -14, y: top - 35, width: 28, height: 23, rx: 8 }, R.bubble);
     el("path", { class: "bubble-box", d: `M -4 ${top - 12.8} L 0 ${top - 6.5} L 4 ${top - 12.8}` }, R.bubble);
@@ -1094,6 +1306,7 @@
   const extraRow = document.getElementById("r3");
   const logEl = document.getElementById("log");
   const coEl = document.getElementById("co");
+  const crowsEl = document.getElementById("crows");
   const reduceMotion = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : { matches: false };
   if (CO) coEl.hidden = false;
 
@@ -1122,6 +1335,7 @@
   let lastLogAt = 0;
   let lastLogSig = "";
   let lastCoKey = "";
+  let crowsOn = false;
 
   const pathD = route => route.map(([x, y], i) => `${i ? "L" : "M"}${pt(x, y)}`).join(" ");
 
@@ -1211,6 +1425,11 @@
     const p = s.p;
     const still = reduceMotion.matches;
     moveRunner(blake, s, t, PLACES);
+    const crows = !s.moving && !!PLACES[s.place].crows;
+    if (crows !== crowsOn) {
+      crowsOn = crows;
+      crowsEl.className = crows ? "crows on" : "crows";
+    }
     routeFor = showRoute(routeEl, s, routeFor);
 
     if (CO) {

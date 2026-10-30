@@ -15,6 +15,8 @@ Places live in the `LOCATIONS` array at the top of the script, and most requests
 - `icon` is the emoji in his thought bubble while he's there.
 - `address` only appears in the pin's hover tooltip.
 - `labelSide` is "left", "right" or "below". Pick whichever keeps the name clear of other labels and roads.
+- `weight` makes a place come up more often: `weight: 4` means four times as likely as a place without one each time he picks a spot. The corn patch has `weight: 4` for Halloween; set it back to 1 (or delete it) after.
+- `crows: true` (the corn patch has it) makes crows fly around the whole screen while Blake is stopped there. They're the `.crows` overlay after `</main>`, can't be clicked, and fade in and out.
 
 `north` and `east` are Logan grid numbers. 100 is one block, and south and west are negative. So 820 N 1200 E is `north: 820, east: 1200`, and 880 S Main St is `north: -880, east: 0`. The map's frame is worked out from the places, so a place outside the current area makes the map bigger.
 
@@ -23,6 +25,10 @@ The owner writes some of the jokes themselves. Leave their wording alone unless 
 ## Temporary: a coworker
 
 A coworker runs around the map at the same time as Blake. The `COWORKER` block in the script, just after the constants, holds his name and his own places, which work like `LOCATIONS`. His head is `<image id="co-head">` in the map's `<defs>`. He gets his own schedule from `timeline()`, his own pins, and a one-sentence status under Blake's stats. A place of his at the same north/east as one of Blake's (his office is Blake's IT Building) shares Blake's pin, and when they're both standing there he steps aside (`stepAside()`) so both heads show. While he's on, "Recent sightings" shows three entries instead of four, so the desktop page still fits without scrolling. He's off by default, and the page is then exactly what it was without him. A hidden switch turns him on: five quick clicks on "Live" (each within 0.7 s) turn him on, or back off, in just that browser, saved in localStorage under `wheres-blake-coworker`, and reload the page. Set `COWORKER` to `null` to remove him for everyone, switch and all. "Live" must keep giving no hint that it's clickable: no pointer cursor, hover style, focus ring, tap highlight or text selection. `tools/check.js` only checks Blake.
+
+## Seasonal: Halloween
+
+While `<html>` has `data-season="halloween"`, the site wears a Halloween theme: pumpkin-orange page, orange roads and lavender campus and hills by day, a purple night in dark mode, a 🎃 after the wordmark, a moon and two bats over the foothills, and a crooked witch hat on Blake (and the coworker), with the thought bubble raised a little to clear it. The colors are their own token blocks right after the normal ones, and the two Halloween dark blocks must stay identical too. Delete the attribute to turn it all off; the page is then exactly as it is without it. The script reads the attribute into `HALLOWEEN`; `tools/check.js` runs with it off.
 
 ## How the rest works
 
@@ -53,7 +59,7 @@ Some things look like bugs but are jokes:
 ## Conventions
 
 - Colors are CSS custom properties on `:root`. Dark mode redefines them in two places, the `prefers-color-scheme` media query and `:root[data-theme="dark"]`, and the two blocks must stay identical.
-- Respect `prefers-reduced-motion`, which means no bobbing, head wobble or pulsing dot.
+- Respect `prefers-reduced-motion`, which means no bobbing, head wobble, pulsing dot or flying crows.
 - Keep every localStorage access inside try/catch.
 - Street names use non-breaking spaces so they never wrap in the middle.
 
