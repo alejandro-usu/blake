@@ -33,6 +33,8 @@
     --spot-ring: #000000;
     --shadow: rgba(0, 0, 0, 0.28);
     --frame: #000000;
+    --crow: #141414;
+    --crow-glow: transparent;
 
     --font: "Overpass", "Helvetica Neue", Helvetica, Arial, sans-serif;
     --emoji: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
@@ -63,6 +65,8 @@
       --spot-ring: #FFCD00;
       --shadow: rgba(0, 0, 0, 0.55);
       --frame: #FFCD00;
+      --crow: #0B0B0B;
+      --crow-glow: rgba(255, 205, 0, 0.8);
       color-scheme: dark;
     }
   }
@@ -86,6 +90,8 @@
     --spot-ring: #FFCD00;
     --shadow: rgba(0, 0, 0, 0.55);
     --frame: #FFCD00;
+    --crow: #0B0B0B;
+    --crow-glow: rgba(255, 205, 0, 0.8);
     color-scheme: dark;
   }
 
@@ -309,8 +315,71 @@
     .status { min-height: 3.12em; }
   }
 
+  /* Crows fly around the whole screen while Blake is at a place with
+     crows: true (the corn patch). Clicks go right through them. */
+  .crows {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s, visibility 0.8s;
+  }
+  .crows.on { opacity: 1; visibility: visible; }
+  .crow {
+    position: absolute;
+    top: var(--top);
+    left: var(--left, 0);
+    animation: var(--path) var(--fly) linear var(--delay) infinite;
+  }
+  .crow svg {
+    display: block;
+    width: var(--size);
+    height: auto;
+    overflow: visible;
+    fill: var(--crow);
+    filter: drop-shadow(0 0 2px var(--crow-glow));
+    transform: scaleX(var(--dir, 1));   /* -1 faces west */
+  }
+  .crow .wings {
+    transform-origin: 24px 12px;
+    animation: crow-flap var(--flap) ease-in-out infinite alternate;
+  }
+  @keyframes crow-flap {
+    from { transform: scaleY(1); }
+    to { transform: scaleY(-0.45); }
+  }
+  @keyframes crow-east {
+    0% { transform: translate(-15vw, 0); }
+    25% { transform: translate(20vw, -4vh); }
+    50% { transform: translate(50vw, 3vh); }
+    75% { transform: translate(80vw, -3vh); }
+    100% { transform: translate(115vw, 0); }
+  }
+  @keyframes crow-west {
+    0% { transform: translate(115vw, 0); }
+    25% { transform: translate(80vw, 4vh); }
+    50% { transform: translate(50vw, -3vh); }
+    75% { transform: translate(20vw, 3vh); }
+    100% { transform: translate(-15vw, 0); }
+  }
+  @keyframes crow-circle {
+    0% { transform: translate(0, -14vmin); }
+    12.5% { transform: translate(14vmin, -10vmin); }
+    25% { transform: translate(20vmin, 0); }
+    37.5% { transform: translate(14vmin, 10vmin); }
+    50% { transform: translate(0, 14vmin); }
+    62.5% { transform: translate(-14vmin, 10vmin); }
+    75% { transform: translate(-20vmin, 0); }
+    87.5% { transform: translate(-14vmin, -10vmin); }
+    100% { transform: translate(0, -14vmin); }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .dot::after { animation: none; opacity: 0; }
+    .crows { display: none; }
   }
 </style>
 </head>
@@ -350,6 +419,15 @@
     <ol id="log"></ol>
   </section>
 </main>
+
+<div class="crows" id="crows" aria-hidden="true">
+  <div class="crow" style="--path: crow-east; --fly: 9s; --delay: -1s; --top: 12vh; --size: 64px; --flap: 0.4s"><svg viewBox="0 0 48 24"><path class="wings" d="M24 12 C20 3 11 1 3 4 C10 6 15 9 19 14 Z M24 12 C28 3 37 1 45 4 C38 6 33 9 29 14 Z"/><path d="M13 13 L7 10 L8.5 13.5 L7 17 Z M14 13.5 C14 11 18 10 24 10.3 C28 10.5 31 9.5 33 9.5 C35.5 9.5 37 10.8 37.5 12 L41.5 13 L37.5 14 C36.5 16 33 16.8 29 16.8 C21 17 14 16 14 13.5 Z"/></svg></div>
+  <div class="crow" style="--path: crow-east; --fly: 12s; --delay: -7s; --top: 58vh; --size: 52px; --flap: 0.34s"><svg viewBox="0 0 48 24"><path class="wings" d="M24 12 C20 3 11 1 3 4 C10 6 15 9 19 14 Z M24 12 C28 3 37 1 45 4 C38 6 33 9 29 14 Z"/><path d="M13 13 L7 10 L8.5 13.5 L7 17 Z M14 13.5 C14 11 18 10 24 10.3 C28 10.5 31 9.5 33 9.5 C35.5 9.5 37 10.8 37.5 12 L41.5 13 L37.5 14 C36.5 16 33 16.8 29 16.8 C21 17 14 16 14 13.5 Z"/></svg></div>
+  <div class="crow" style="--path: crow-west; --fly: 10s; --delay: -3s; --top: 34vh; --size: 58px; --dir: -1; --flap: 0.45s"><svg viewBox="0 0 48 24"><path class="wings" d="M24 12 C20 3 11 1 3 4 C10 6 15 9 19 14 Z M24 12 C28 3 37 1 45 4 C38 6 33 9 29 14 Z"/><path d="M13 13 L7 10 L8.5 13.5 L7 17 Z M14 13.5 C14 11 18 10 24 10.3 C28 10.5 31 9.5 33 9.5 C35.5 9.5 37 10.8 37.5 12 L41.5 13 L37.5 14 C36.5 16 33 16.8 29 16.8 C21 17 14 16 14 13.5 Z"/></svg></div>
+  <div class="crow" style="--path: crow-west; --fly: 14s; --delay: -10s; --top: 80vh; --size: 72px; --dir: -1; --flap: 0.5s"><svg viewBox="0 0 48 24"><path class="wings" d="M24 12 C20 3 11 1 3 4 C10 6 15 9 19 14 Z M24 12 C28 3 37 1 45 4 C38 6 33 9 29 14 Z"/><path d="M13 13 L7 10 L8.5 13.5 L7 17 Z M14 13.5 C14 11 18 10 24 10.3 C28 10.5 31 9.5 33 9.5 C35.5 9.5 37 10.8 37.5 12 L41.5 13 L37.5 14 C36.5 16 33 16.8 29 16.8 C21 17 14 16 14 13.5 Z"/></svg></div>
+  <div class="crow" style="--path: crow-circle; --fly: 7s; --delay: -2s; --top: 30vh; --left: 62vw; --size: 54px; --flap: 0.36s"><svg viewBox="0 0 48 24"><path class="wings" d="M24 12 C20 3 11 1 3 4 C10 6 15 9 19 14 Z M24 12 C28 3 37 1 45 4 C38 6 33 9 29 14 Z"/><path d="M13 13 L7 10 L8.5 13.5 L7 17 Z M14 13.5 C14 11 18 10 24 10.3 C28 10.5 31 9.5 33 9.5 C35.5 9.5 37 10.8 37.5 12 L41.5 13 L37.5 14 C36.5 16 33 16.8 29 16.8 C21 17 14 16 14 13.5 Z"/></svg></div>
+  <div class="crow" style="--path: crow-circle; --fly: 9s; --delay: -5s; --top: 55vh; --left: 28vw; --size: 48px; --dir: -1; --flap: 0.3s"><svg viewBox="0 0 48 24"><path class="wings" d="M24 12 C20 3 11 1 3 4 C10 6 15 9 19 14 Z M24 12 C28 3 37 1 45 4 C38 6 33 9 29 14 Z"/><path d="M13 13 L7 10 L8.5 13.5 L7 17 Z M14 13.5 C14 11 18 10 24 10.3 C28 10.5 31 9.5 33 9.5 C35.5 9.5 37 10.8 37.5 12 L41.5 13 L37.5 14 C36.5 16 33 16.8 29 16.8 C21 17 14 16 14 13.5 Z"/></svg></div>
+</div>
 
 <script>
 (() => {
@@ -522,6 +600,7 @@
       east: 1000,
       icon: "🌽",
       labelSide: "left",
+      crows: true,
       here: ["at the corn patch", "somewhere in the corn patch", "lost in the corn patch", "hiding in the corn patch", "back at the corn patch", "definitely at the corn patch", "probably at the corn patch", "allegedly at the corn patch"],
       activities: [
         "Running from black birds / crows"
@@ -1094,6 +1173,7 @@
   const extraRow = document.getElementById("r3");
   const logEl = document.getElementById("log");
   const coEl = document.getElementById("co");
+  const crowsEl = document.getElementById("crows");
   const reduceMotion = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : { matches: false };
   if (CO) coEl.hidden = false;
 
@@ -1122,6 +1202,7 @@
   let lastLogAt = 0;
   let lastLogSig = "";
   let lastCoKey = "";
+  let crowsOn = false;
 
   const pathD = route => route.map(([x, y], i) => `${i ? "L" : "M"}${pt(x, y)}`).join(" ");
 
@@ -1211,6 +1292,11 @@
     const p = s.p;
     const still = reduceMotion.matches;
     moveRunner(blake, s, t, PLACES);
+    const crows = !s.moving && !!PLACES[s.place].crows;
+    if (crows !== crowsOn) {
+      crowsOn = crows;
+      crowsEl.className = crows ? "crows on" : "crows";
+    }
     routeFor = showRoute(routeEl, s, routeFor);
 
     if (CO) {

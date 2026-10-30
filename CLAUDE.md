@@ -15,6 +15,7 @@ Places live in the `LOCATIONS` array at the top of the script, and most requests
 - `icon` is the emoji in his thought bubble while he's there.
 - `address` only appears in the pin's hover tooltip.
 - `labelSide` is "left", "right" or "below". Pick whichever keeps the name clear of other labels and roads.
+- `crows: true` (the corn patch has it) makes crows fly around the whole screen while Blake is stopped there. They're the `.crows` overlay after `</main>`, can't be clicked, and fade in and out.
 
 `north` and `east` are Logan grid numbers. 100 is one block, and south and west are negative. So 820 N 1200 E is `north: 820, east: 1200`, and 880 S Main St is `north: -880, east: 0`. The map's frame is worked out from the places, so a place outside the current area makes the map bigger.
 
@@ -53,7 +54,7 @@ Some things look like bugs but are jokes:
 ## Conventions
 
 - Colors are CSS custom properties on `:root`. Dark mode redefines them in two places, the `prefers-color-scheme` media query and `:root[data-theme="dark"]`, and the two blocks must stay identical.
-- Respect `prefers-reduced-motion`, which means no bobbing, head wobble or pulsing dot.
+- Respect `prefers-reduced-motion`, which means no bobbing, head wobble, pulsing dot or flying crows.
 - Keep every localStorage access inside try/catch.
 - Street names use non-breaking spaces so they never wrap in the middle.
 
