@@ -601,9 +601,12 @@
       icon: "🌽",
       labelSide: "left",
       crows: true,
+      weight: 4,   // Halloween: he picks it about 3x as often. Back to 1 (or delete this) after.
       here: ["at the corn patch", "somewhere in the corn patch", "lost in the corn patch", "hiding in the corn patch", "back at the corn patch", "definitely at the corn patch", "probably at the corn patch", "allegedly at the corn patch"],
       activities: [
-        "Running from black birds / crows"
+        "Running from crows",
+        "Eating candy corn",
+        "Flirting with witches"
       ]
     }
   ];
@@ -857,7 +860,17 @@
     const plans = new Map();
     const slotOf = t => Math.floor((t + phase) / SLOT_MS);
     const slotStart = k => k * SLOT_MS - phase;
-    const spotAt = k => Math.floor(rng(mix(seed ^ 0x5bd1e995, k))() * places.length);
+    // Where he is at the start of slot k. A place with weight: 2 comes up
+    // twice as often as one without.
+    const cum = [];
+    let total = 0;
+    for (const p of places) cum.push(total += p.weight || 1);
+    const spotAt = k => {
+      const u = rng(mix(seed ^ 0x5bd1e995, k))() * total;
+      let i = 0;
+      while (u >= cum[i] && i < places.length - 1) i++;
+      return i;
+    };
 
     function plan(k) {
       if (plans.has(k)) return plans.get(k);
