@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-season="halloween">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -92,6 +92,99 @@
     --frame: #FFCD00;
     --crow: #0B0B0B;
     --crow-glow: rgba(255, 205, 0, 0.8);
+    color-scheme: dark;
+  }
+
+  /* Halloween: on while <html> has data-season="halloween"; delete that
+     attribute to go back to road-sign yellow. Pumpkin orange by day, a
+     purple night in dark mode. Like above, the two dark blocks must stay
+     identical. */
+  :root[data-season="halloween"] {
+    --page: #FF8A1F;
+    --ink: #000000;
+    --ink-soft: #5A2600;
+    --rule: rgba(0, 0, 0, 0.22);
+    --live: #7B2CBF;
+    --land: #F1ECE2;
+    --street: #FFFFFF;
+    --road: #FF8A1F;
+    --road-edge: #C25E00;
+    --campus: #DCCDEB;
+    --hills: #D2C8DC;
+    --hills-line: #9A88AE;
+    --map-ink: #000000;
+    --route: #000000;
+    --spot-fill: #FFFFFF;
+    --spot-ring: #000000;
+    --shadow: rgba(0, 0, 0, 0.28);
+    --frame: #000000;
+    --crow: #141414;
+    --crow-glow: transparent;
+    --moon: #FFE9A8;
+    --moon-edge: #E0A030;
+    --hat: #1C1424;
+    --hat-band: #FF8A1F;
+    --hat-edge: #000000;
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root[data-season="halloween"]:not([data-theme="light"]) {
+      --page: #17111F;
+      --ink: #FF8A1F;
+      --ink-soft: #C9701E;
+      --rule: rgba(255, 138, 31, 0.25);
+      --live: #B07CFF;
+      --land: #241C2E;
+      --street: #352B40;
+      --road: #FF8A1F;
+      --road-edge: #7A3A00;
+      --campus: #3A2B4D;
+      --hills: #2B2336;
+      --hills-line: #5E4D73;
+      --map-ink: #EFE8F7;
+      --route: #FFFFFF;
+      --spot-fill: #17111F;
+      --spot-ring: #FF8A1F;
+      --shadow: rgba(0, 0, 0, 0.6);
+      --frame: #FF8A1F;
+      --crow: #0B0B0B;
+      --crow-glow: rgba(255, 138, 31, 0.8);
+      --moon: #F4E6B5;
+      --moon-edge: #F4E6B5;
+      --hat: #120D18;
+      --hat-band: #B07CFF;
+      --hat-edge: #FF8A1F;
+      color-scheme: dark;
+    }
+  }
+
+  :root[data-season="halloween"][data-theme="dark"] {
+    --page: #17111F;
+    --ink: #FF8A1F;
+    --ink-soft: #C9701E;
+    --rule: rgba(255, 138, 31, 0.25);
+    --live: #B07CFF;
+    --land: #241C2E;
+    --street: #352B40;
+    --road: #FF8A1F;
+    --road-edge: #7A3A00;
+    --campus: #3A2B4D;
+    --hills: #2B2336;
+    --hills-line: #5E4D73;
+    --map-ink: #EFE8F7;
+    --route: #FFFFFF;
+    --spot-fill: #17111F;
+    --spot-ring: #FF8A1F;
+    --shadow: rgba(0, 0, 0, 0.6);
+    --frame: #FF8A1F;
+    --crow: #0B0B0B;
+    --crow-glow: rgba(255, 138, 31, 0.8);
+    --moon: #F4E6B5;
+    --moon-edge: #F4E6B5;
+    --hat: #120D18;
+    --hat-band: #B07CFF;
+    --hat-edge: #FF8A1F;
     color-scheme: dark;
   }
 
@@ -197,6 +290,12 @@
   .campus { fill: var(--campus); stroke: var(--campus); stroke-width: 14px; stroke-linejoin: round; }
   .hills { fill: var(--hills); }
   .peak { fill: none; stroke: var(--hills-line); stroke-width: 2px; stroke-linecap: round; stroke-linejoin: round; }
+  /* Halloween extras: the moon and bats on the map, witch hats, a pumpkin */
+  .moon { fill: var(--moon); stroke: var(--moon-edge); stroke-width: 1.5px; }
+  .bat { fill: var(--crow); filter: drop-shadow(0 0 1.5px var(--crow-glow)); }
+  .hat { fill: var(--hat); stroke: var(--hat-edge); stroke-width: 0.8px; stroke-linejoin: round; }
+  .hat .hat-band { fill: var(--hat-band); stroke: none; }
+  :root[data-season="halloween"] .wordmark::after { content: "🎃"; margin-left: 0.3em; font-family: var(--emoji); }
   .lbl {
     fill: var(--map-ink);
     font-size: 12.5px;
@@ -618,6 +717,8 @@
 
   const RUN_VERBS = ["sprinting to", "booking it to", "hustling over to", "running to", "racing to"];
   const ACCURACY = ["± 6 ft", "± 15 ft", "± 40 ft", "± 0.3 mi", "± 2 mi", "± 3 mi", "Somewhere in Cache Valley"];
+  // The Halloween theme is on while <html> has data-season="halloween"
+  const HALLOWEEN = document.documentElement.getAttribute?.("data-season") === "halloween";
 
   /* ---------- Temporary: a coworker runs around too ----------
      While COWORKER is set, a second head (#co-head in the map's <defs>) runs
@@ -1130,6 +1231,15 @@
       el("path", { class: "peak", d: `M${pt(x - 0.42, y - 0.28)} L${pt(x, y + 0.34)} L${pt(x + 0.42, y - 0.28)}` }, base);
     });
 
+  // Halloween: a full moon over the foothills, and two bats
+  if (HALLOWEEN) {
+    el("circle", { class: "moon", cx: px(B.maxX - 2.3), cy: py(B.maxY - 2.1), r: 26 }, base);
+    const BAT = "M0 0 C-2 -2 -4 -2 -8 -4 C-7 -1 -7 1 -6 2 C-5 1 -4 1 -3 2 C-2 1 -1 1 0 2 C1 1 2 1 3 2 C4 1 5 1 6 2 C7 1 7 -1 8 -4 C4 -2 2 -2 0 0 Z";
+    for (const [x, y, size] of [[B.maxX - 4.4, B.maxY - 1.4, 1.3], [B.maxX - 3.6, B.maxY - 3.7, 1]]) {
+      el("path", { class: "bat", d: BAT, transform: `translate(${pt(x, y)}) scale(${size})` }, base);
+    }
+  }
+
   const labels = el("g", {}, svg);
   const label = (x, y, words, cls) => el("text", { class: cls || "lbl", x: px(x), y: py(y) }, labels, words);
   label(0.4, B.minY + 0.6, "Main St");
@@ -1169,7 +1279,17 @@
     R.g = el("g", {}, svg);
     R.shadow = el("ellipse", { class: "shadow", cx: 0, cy: 0, rx: 10.5, ry: 3.8 }, R.g);
     R.body = el("g", {}, R.g);
-    R.head = el("use", { href: `#${headId}` }, R.body);
+    R.head = el("g", {}, R.body);
+    el("use", { href: `#${headId}` }, R.head);
+    // Halloween: a crooked witch hat, its tip bent away from the thought
+    // bubble, which moves up a little to clear it
+    if (HALLOWEEN) {
+      const hat = el("g", { class: "hat", transform: `translate(0 ${top + 2})` }, R.head);
+      el("path", { d: "M -8 1.5 Q 0 -10 17 -8 Q 9 -4 10 1.5 Z" }, hat);
+      el("path", { class: "hat-band", d: "M -7.6 -0.6 Q 1 -3 9.8 -0.8 L 10 1.5 L -8 1.5 Z" }, hat);
+      el("ellipse", { cx: 1, cy: 2.2, rx: 14, ry: 2.6 }, hat);
+      top -= 6;
+    }
     R.bubble = el("g", {}, R.g);
     el("rect", { class: "bubble-box", x: -14, y: top - 35, width: 28, height: 23, rx: 8 }, R.bubble);
     el("path", { class: "bubble-box", d: `M -4 ${top - 12.8} L 0 ${top - 6.5} L 4 ${top - 12.8}` }, R.bubble);
