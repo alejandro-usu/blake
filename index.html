@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-season="halloween">
+<html lang="en" data-season="fall">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -95,96 +95,104 @@
     color-scheme: dark;
   }
 
-  /* Halloween: on while <html> has data-season="halloween"; delete that
-     attribute to go back to road-sign yellow. Pumpkin orange by day, a
-     purple night in dark mode. Like above, the two dark blocks must stay
-     identical. */
-  :root[data-season="halloween"] {
-    --page: #FF8A1F;
-    --ink: #000000;
-    --ink-soft: #5A2600;
-    --rule: rgba(0, 0, 0, 0.22);
-    --live: #7B2CBF;
-    --land: #F1ECE2;
+  /* Fall: on while <html> has data-season="fall"; delete that attribute to
+     go back to road-sign yellow. Burnt orange by day, a warm brown night in
+     dark mode. Like above, the two dark blocks must stay identical. */
+  :root[data-season="fall"] {
+    --page: #E8772E;
+    --ink: #2B1609;
+    --ink-soft: #5E2C0B;
+    --rule: rgba(43, 22, 9, 0.22);
+    --live: #B3261E;
+    --land: #F4EBDD;
     --street: #FFFFFF;
-    --road: #FF8A1F;
-    --road-edge: #C25E00;
-    --campus: #DCCDEB;
-    --hills: #D2C8DC;
-    --hills-line: #9A88AE;
-    --map-ink: #000000;
-    --route: #000000;
+    --road: #E8772E;
+    --road-edge: #A9501A;
+    --campus: #D9DDB8;
+    --hills: #E7B98A;
+    --hills-line: #B5703A;
+    --map-ink: #2B1609;
+    --route: #2B1609;
     --spot-fill: #FFFFFF;
-    --spot-ring: #000000;
+    --spot-ring: #2B1609;
     --shadow: rgba(0, 0, 0, 0.28);
-    --frame: #000000;
+    --frame: #2B1609;
     --crow: #141414;
     --crow-glow: transparent;
-    --moon: #FFE9A8;
-    --moon-edge: #E0A030;
-    --hat: #1C1424;
-    --hat-band: #FF8A1F;
-    --hat-edge: #000000;
+    --hat: #B5451B;
+    --hat-band: #8E3414;
+    --hat-pom: #E0A526;
+    --hat-edge: #5E2C0B;
+    --tree-1: #D9541E;
+    --tree-2: #E9A23B;
+    --tree-3: #A8322B;
+    --trunk: #6B4423;
     color-scheme: light;
   }
 
   @media (prefers-color-scheme: dark) {
-    :root[data-season="halloween"]:not([data-theme="light"]) {
-      --page: #17111F;
-      --ink: #FF8A1F;
-      --ink-soft: #C9701E;
-      --rule: rgba(255, 138, 31, 0.25);
-      --live: #B07CFF;
-      --land: #241C2E;
-      --street: #352B40;
-      --road: #FF8A1F;
-      --road-edge: #7A3A00;
-      --campus: #3A2B4D;
-      --hills: #2B2336;
-      --hills-line: #5E4D73;
-      --map-ink: #EFE8F7;
+    :root[data-season="fall"]:not([data-theme="light"]) {
+      --page: #1E1712;
+      --ink: #F0A04B;
+      --ink-soft: #BF7A35;
+      --rule: rgba(240, 160, 75, 0.25);
+      --live: #FF6B4A;
+      --land: #2A221B;
+      --street: #3A2F25;
+      --road: #E8772E;
+      --road-edge: #6E3410;
+      --campus: #33382A;
+      --hills: #3B2A1E;
+      --hills-line: #7A5236;
+      --map-ink: #F3E9DC;
       --route: #FFFFFF;
-      --spot-fill: #17111F;
-      --spot-ring: #FF8A1F;
+      --spot-fill: #1E1712;
+      --spot-ring: #F0A04B;
       --shadow: rgba(0, 0, 0, 0.6);
-      --frame: #FF8A1F;
+      --frame: #F0A04B;
       --crow: #0B0B0B;
-      --crow-glow: rgba(255, 138, 31, 0.8);
-      --moon: #F4E6B5;
-      --moon-edge: #F4E6B5;
-      --hat: #120D18;
-      --hat-band: #B07CFF;
-      --hat-edge: #FF8A1F;
+      --crow-glow: rgba(240, 160, 75, 0.8);
+      --hat: #B5451B;
+      --hat-band: #8E3414;
+      --hat-pom: #E0A526;
+      --hat-edge: #000000;
+      --tree-1: #C24A1A;
+      --tree-2: #D38E2E;
+      --tree-3: #8F2A24;
+      --trunk: #8A5A33;
       color-scheme: dark;
     }
   }
 
-  :root[data-season="halloween"][data-theme="dark"] {
-    --page: #17111F;
-    --ink: #FF8A1F;
-    --ink-soft: #C9701E;
-    --rule: rgba(255, 138, 31, 0.25);
-    --live: #B07CFF;
-    --land: #241C2E;
-    --street: #352B40;
-    --road: #FF8A1F;
-    --road-edge: #7A3A00;
-    --campus: #3A2B4D;
-    --hills: #2B2336;
-    --hills-line: #5E4D73;
-    --map-ink: #EFE8F7;
+  :root[data-season="fall"][data-theme="dark"] {
+    --page: #1E1712;
+    --ink: #F0A04B;
+    --ink-soft: #BF7A35;
+    --rule: rgba(240, 160, 75, 0.25);
+    --live: #FF6B4A;
+    --land: #2A221B;
+    --street: #3A2F25;
+    --road: #E8772E;
+    --road-edge: #6E3410;
+    --campus: #33382A;
+    --hills: #3B2A1E;
+    --hills-line: #7A5236;
+    --map-ink: #F3E9DC;
     --route: #FFFFFF;
-    --spot-fill: #17111F;
-    --spot-ring: #FF8A1F;
+    --spot-fill: #1E1712;
+    --spot-ring: #F0A04B;
     --shadow: rgba(0, 0, 0, 0.6);
-    --frame: #FF8A1F;
+    --frame: #F0A04B;
     --crow: #0B0B0B;
-    --crow-glow: rgba(255, 138, 31, 0.8);
-    --moon: #F4E6B5;
-    --moon-edge: #F4E6B5;
-    --hat: #120D18;
-    --hat-band: #B07CFF;
-    --hat-edge: #FF8A1F;
+    --crow-glow: rgba(240, 160, 75, 0.8);
+    --hat: #B5451B;
+    --hat-band: #8E3414;
+    --hat-pom: #E0A526;
+    --hat-edge: #000000;
+    --tree-1: #C24A1A;
+    --tree-2: #D38E2E;
+    --tree-3: #8F2A24;
+    --trunk: #8A5A33;
     color-scheme: dark;
   }
 
@@ -290,12 +298,16 @@
   .campus { fill: var(--campus); stroke: var(--campus); stroke-width: 14px; stroke-linejoin: round; }
   .hills { fill: var(--hills); }
   .peak { fill: none; stroke: var(--hills-line); stroke-width: 2px; stroke-linecap: round; stroke-linejoin: round; }
-  /* Halloween extras: the moon and bats on the map, witch hats, a pumpkin */
-  .moon { fill: var(--moon); stroke: var(--moon-edge); stroke-width: 1.5px; }
-  .bat { fill: var(--crow); filter: drop-shadow(0 0 1.5px var(--crow-glow)); }
+  /* Fall extras: trees on the foothills, a knit beanie, a leaf by the name */
+  .trunk { stroke: var(--trunk); stroke-width: 2.5px; stroke-linecap: round; }
+  .tree-1 { fill: var(--tree-1); }
+  .tree-2 { fill: var(--tree-2); }
+  .tree-3 { fill: var(--tree-3); }
   .hat { fill: var(--hat); stroke: var(--hat-edge); stroke-width: 0.8px; stroke-linejoin: round; }
-  .hat .hat-band { fill: var(--hat-band); stroke: none; }
-  :root[data-season="halloween"] .wordmark::after { content: "🎃"; margin-left: 0.3em; font-family: var(--emoji); }
+  .hat .hat-band { fill: var(--hat-band); }
+  .hat .hat-rib { fill: none; stroke: var(--hat-band); stroke-width: 1px; }
+  .hat .hat-pom { fill: var(--hat-pom); }
+  :root[data-season="fall"] .wordmark::after { content: "🍂"; margin-left: 0.3em; font-family: var(--emoji); }
   .lbl {
     fill: var(--map-ink);
     font-size: 12.5px;
@@ -415,7 +427,7 @@
   }
 
   /* Crows fly around the whole screen while Blake is at a place with
-     crows: true (the corn patch). Clicks go right through them. */
+     crows: true (none right now). Clicks go right through them. */
   .crows {
     position: fixed;
     inset: 0;
@@ -476,9 +488,43 @@
     100% { transform: translate(0, -14vmin); }
   }
 
+  /* Fall: a few leaves drift down the whole screen. Clicks go through. */
+  .leaves {
+    display: none;
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 9;
+  }
+  :root[data-season="fall"] .leaves { display: block; }
+  .leaf {
+    position: absolute;
+    top: -8vh;
+    left: var(--x);
+    font-family: var(--emoji);
+    font-size: var(--size);
+    line-height: 1;
+    opacity: 0.9;
+    animation: leaf-fall var(--fall) linear var(--delay) infinite;
+  }
+  .leaf span {
+    display: block;
+    animation: leaf-sway var(--swing) ease-in-out var(--delay) infinite alternate;
+  }
+  @keyframes leaf-fall {
+    from { transform: translateY(0); }
+    to { transform: translateY(118vh); }
+  }
+  @keyframes leaf-sway {
+    from { transform: translateX(calc(var(--sway) * -1)) rotate(-30deg); }
+    to { transform: translateX(var(--sway)) rotate(30deg); }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .dot::after { animation: none; opacity: 0; }
     .crows { display: none; }
+    :root[data-season="fall"] .leaves { display: none; }
   }
 </style>
 </head>
@@ -518,6 +564,16 @@
     <ol id="log"></ol>
   </section>
 </main>
+
+<div class="leaves" aria-hidden="true">
+  <div class="leaf" style="--x: 6vw; --fall: 16s; --delay: -3s; --size: 22px; --swing: 3.2s; --sway: 4vw"><span>🍁</span></div>
+  <div class="leaf" style="--x: 19vw; --fall: 21s; --delay: -14s; --size: 18px; --swing: 2.6s; --sway: 3vw"><span>🍂</span></div>
+  <div class="leaf" style="--x: 34vw; --fall: 18s; --delay: -8s; --size: 26px; --swing: 3.6s; --sway: 5vw"><span>🍂</span></div>
+  <div class="leaf" style="--x: 51vw; --fall: 23s; --delay: -1s; --size: 20px; --swing: 2.9s; --sway: 4vw"><span>🍁</span></div>
+  <div class="leaf" style="--x: 66vw; --fall: 17s; --delay: -11s; --size: 24px; --swing: 3.4s; --sway: 5vw"><span>🍂</span></div>
+  <div class="leaf" style="--x: 80vw; --fall: 20s; --delay: -5s; --size: 19px; --swing: 2.7s; --sway: 3vw"><span>🍁</span></div>
+  <div class="leaf" style="--x: 92vw; --fall: 19s; --delay: -16s; --size: 23px; --swing: 3.1s; --sway: 4vw"><span>🍂</span></div>
+</div>
 
 <div class="crows" id="crows" aria-hidden="true">
   <div class="crow" style="--path: crow-east; --fly: 9s; --delay: -1s; --top: 12vh; --size: 64px; --flap: 0.4s"><svg viewBox="0 0 48 24"><path class="wings" d="M24 12 C20 3 11 1 3 4 C10 6 15 9 19 14 Z M24 12 C28 3 37 1 45 4 C38 6 33 9 29 14 Z"/><path d="M13 13 L7 10 L8.5 13.5 L7 17 Z M14 13.5 C14 11 18 10 24 10.3 C28 10.5 31 9.5 33 9.5 C35.5 9.5 37 10.8 37.5 12 L41.5 13 L37.5 14 C36.5 16 33 16.8 29 16.8 C21 17 14 16 14 13.5 Z"/></svg></div>
@@ -690,23 +746,6 @@
         "“This isn’t a prediction market”",
         "Gambling his paycheck and losing all of it"
       ]
-    },
-    {
-      name: "Corn Patch",
-      phrase: "the corn patch",
-      address: "exact location unknown",
-      north: 200,
-      east: 1000,
-      icon: "🌽",
-      labelSide: "left",
-      crows: true,
-      weight: 4,   // Halloween: he picks it about 3x as often. Back to 1 (or delete this) after.
-      here: ["at the corn patch", "somewhere in the corn patch", "lost in the corn patch", "hiding in the corn patch", "back at the corn patch", "definitely at the corn patch", "probably at the corn patch", "allegedly at the corn patch"],
-      activities: [
-        "Running from crows",
-        "Eating candy corn",
-        "Flirting with witches"
-      ]
     }
   ];
 
@@ -717,8 +756,8 @@
 
   const RUN_VERBS = ["sprinting to", "booking it to", "hustling over to", "running to", "racing to"];
   const ACCURACY = ["± 6 ft", "± 15 ft", "± 40 ft", "± 0.3 mi", "± 2 mi", "± 3 mi", "Somewhere in Cache Valley"];
-  // The Halloween theme is on while <html> has data-season="halloween"
-  const HALLOWEEN = document.documentElement.getAttribute?.("data-season") === "halloween";
+  // The seasonal theme, from <html data-season="…">: "fall", or none
+  const SEASON = document.documentElement.getAttribute?.("data-season");
 
   /* ---------- Temporary: a coworker runs around too ----------
      While COWORKER is set, a second head (#co-head in the map's <defs>) runs
@@ -1231,13 +1270,16 @@
       el("path", { class: "peak", d: `M${pt(x - 0.42, y - 0.28)} L${pt(x, y + 0.34)} L${pt(x + 0.42, y - 0.28)}` }, base);
     });
 
-  // Halloween: a full moon over the foothills, and two bats
-  if (HALLOWEEN) {
-    el("circle", { class: "moon", cx: px(B.maxX - 2.3), cy: py(B.maxY - 2.1), r: 26 }, base);
-    const BAT = "M0 0 C-2 -2 -4 -2 -8 -4 C-7 -1 -7 1 -6 2 C-5 1 -4 1 -3 2 C-2 1 -1 1 0 2 C1 1 2 1 3 2 C4 1 5 1 6 2 C7 1 7 -1 8 -4 C4 -2 2 -2 0 0 Z";
-    for (const [x, y, size] of [[B.maxX - 4.4, B.maxY - 1.4, 1.3], [B.maxX - 3.6, B.maxY - 3.7, 1]]) {
-      el("path", { class: "bat", d: BAT, transform: `translate(${pt(x, y)}) scale(${size})` }, base);
-    }
+  // Fall: trees in fall colors on the foothills, between the peaks
+  if (SEASON === "fall") {
+    [[16.6, 15.6, 1], [17.5, 12.2, 2], [16.5, 8.7, 3], [17.4, 5.0, 1], [16.6, 1.1, 2], [17.4, -2.8, 3], [16.5, -6.5, 1], [17.4, -10.0, 2], [16.6, -13.4, 3]]
+      .filter(([, y]) => y > B.minY + 0.6 && y < B.maxY - 0.8)
+      .forEach(([x, y, color]) => {
+        el("line", { class: "trunk", x1: px(x), y1: py(y), x2: px(x), y2: py(y + 0.45) }, base);
+        el("circle", { class: `tree-${color}`, cx: px(x), cy: py(y + 0.75), r: 8.5 }, base);
+        el("circle", { class: `tree-${color}`, cx: px(x - 0.28), cy: py(y + 0.55), r: 6 }, base);
+        el("circle", { class: `tree-${color}`, cx: px(x + 0.28), cy: py(y + 0.55), r: 6 }, base);
+      });
   }
 
   const labels = el("g", {}, svg);
@@ -1281,14 +1323,15 @@
     R.body = el("g", {}, R.g);
     R.head = el("g", {}, R.body);
     el("use", { href: `#${headId}` }, R.head);
-    // Halloween: a crooked witch hat, its tip bent away from the thought
-    // bubble, which moves up a little to clear it
-    if (HALLOWEEN) {
-      const hat = el("g", { class: "hat", transform: `translate(0 ${top + 2})` }, R.head);
-      el("path", { d: "M -8 1.5 Q 0 -10 17 -8 Q 9 -4 10 1.5 Z" }, hat);
-      el("path", { class: "hat-band", d: "M -7.6 -0.6 Q 1 -3 9.8 -0.8 L 10 1.5 L -8 1.5 Z" }, hat);
-      el("ellipse", { cx: 1, cy: 2.2, rx: 14, ry: 2.6 }, hat);
-      top -= 6;
+    // Fall: a knit beanie with a pom-pom; the thought bubble moves up a
+    // little to clear it
+    if (SEASON === "fall") {
+      const hat = el("g", { class: "hat", transform: `translate(0 ${top})` }, R.head);
+      el("path", { d: "M -11 5 C -11 -3 -6 -5.5 0 -5.5 C 6 -5.5 11 -3 11 5 Z" }, hat);
+      el("path", { class: "hat-rib", d: "M -7 -2.6 L -7.6 4 M -3.5 -4.8 L -3.8 4 M 0 -5.4 L 0 4 M 3.5 -4.8 L 3.8 4 M 7 -2.6 L 7.6 4" }, hat);
+      el("rect", { class: "hat-band", x: -12.5, y: 3.5, width: 25, height: 5.5, rx: 2.5 }, hat);
+      el("circle", { class: "hat-pom", cx: 0, cy: -7, r: 3.2 }, hat);
+      top -= 5;
     }
     R.bubble = el("g", {}, R.g);
     el("rect", { class: "bubble-box", x: -14, y: top - 35, width: 28, height: 23, rx: 8 }, R.bubble);
