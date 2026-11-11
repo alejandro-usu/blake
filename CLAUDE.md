@@ -15,7 +15,8 @@ Places live in the `LOCATIONS` array at the top of the script, and most requests
 - `icon` is the emoji in his thought bubble while he's there.
 - `address` only appears in the pin's hover tooltip.
 - `labelSide` is "left", "right" or "below". Pick whichever keeps the name clear of other labels and roads.
-- `weight` makes a place come up more often: `weight: 4` means four times as likely as a place without one each time he picks a spot. No place uses it right now.
+- `weight` makes a place come up more often: `weight: 4` means four times as likely as a place without one each time he picks a spot, and `weight: 0` means he never picks it himself.
+- `agent: true` marks where the secret agent takes him (the Marriott, which also has `weight: 0`). See "The secret agent" below.
 - `crows: true` makes crows fly around the whole screen while Blake is stopped there (no place has it right now). They're the `.crows` overlay after `</main>`, can't be clicked, and fade in and out.
 
 `north` and `east` are Logan grid numbers. 100 is one block, and south and west are negative. So 820 N 1200 E is `north: 820, east: 1200`, and 880 S Main St is `north: -880, east: 0`. The map's frame is worked out from the places, so a place outside the current area makes the map bigger.
@@ -47,6 +48,8 @@ Blake's schedule is deterministic for each visitor:
 1. A random seed is kept in localStorage under `wheres-blake-seed`.
 2. Time is cut into 26-second slots, and where he is at each slot boundary is hashed from the seed and the slot number.
 3. Inside a slot he does one of four things: stays put, runs to the next place (sometimes by "the scenic route"), turns back because he "forgot something," or runs laps around the block.
+
+Every so often (`AGENT_EVERY`, `AGENT_CHANCE`), a secret agent (🕵️) runs in from the west edge of the map ("A secret agent is closing in on Blake"), grabs him wherever he's standing and hauls him to the place marked `agent: true`, the Marriott. He's held there for `HELD_SLOTS` slots, with the agent standing guard, and then escapes ("Blake escaped and is sprinting to…"). This is SkiFree's yeti. Outside those windows his schedule is exactly what it would be without the agent. The agent is drawn `AGENT_SIDE` map units to Blake's right so he doesn't cover him. Keep the agent's jokes about spy-movie silliness, not about Blake doing anything actually criminal at work, and don't give the agent a nationality.
 
 Refreshing shows the same Blake. To get a new one, clear that localStorage key. Routes follow the street grid and never move diagonally. The status line, the stats and the "Recent sightings" log are all computed from the same timeline.
 
