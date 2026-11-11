@@ -334,6 +334,8 @@
   }
   .shadow { fill: var(--shadow); }
   .emoji { font-family: var(--emoji); }
+  /* The secret agent glows a little on dark maps, like the crows */
+  .agent-fig { filter: drop-shadow(0 0 1.2px var(--crow-glow)); }
   .bubble-box { fill: #FFFFFF; stroke: #000000; stroke-width: 1.6px; stroke-linejoin: round; }
 
   /* Status */
@@ -543,6 +545,24 @@
         <image id="blake-head" x="-12.7" y="-37" width="25.4" height="38" href="data:image/webp;base64,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"/>
         <!-- Temporary: the coworker's head, cut out of his photo. See COWORKER in the script. -->
         <image id="co-head" x="-12.5" y="-41" width="25" height="42" href="data:image/webp;base64,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"/>
+        <!-- The secret agent: fedora, bob, sunglasses, suit. Drawn here, not an emoji, so she looks the same everywhere. -->
+        <g id="agent-fig" stroke="#1A1714" stroke-width="0.7" stroke-linejoin="round">
+          <path d="M -15 2 C -15 -6 -10 -10 -4 -11 L 4 -11 C 10 -10 15 -6 15 2 Z" fill="#3B3532"/>
+          <path d="M -4 -11 L 0 -3.5 L 4 -11 Z" fill="#FFFFFF"/>
+          <path d="M -4.2 -11 L -1.2 -4 L -6.5 -8.5 Z M 4.2 -11 L 1.2 -4 L 6.5 -8.5 Z" fill="#2A2522"/>
+          <path d="M -1.1 -10.4 L 1.1 -10.4 L 1.7 -5 L 0 -2.8 L -1.7 -5 Z" fill="#1E1C1B"/>
+          <path d="M -12.5 -12 C -13.5 -21 -12 -28.5 0 -29.5 C 12 -28.5 13.5 -21 12.5 -12 C 9.5 -11 7.5 -12 6.3 -14 L -6.3 -14 C -7.5 -12 -9.5 -11 -12.5 -12 Z" fill="#151515"/>
+          <rect x="-2.6" y="-14.5" width="5.2" height="4.5" fill="#F4AE22" stroke="none"/>
+          <ellipse cx="0" cy="-20.5" rx="7.4" ry="8.4" fill="#F7B52B" stroke="#9A6200"/>
+          <path d="M -7.6 -23.5 C -6 -28.2 2.5 -29.3 8 -24.6 C 3.8 -26 -0.8 -25.3 -3.2 -22.3 C -4.6 -23.4 -6.2 -23.6 -7.6 -23.5 Z" fill="#151515"/>
+          <path d="M -7.6 -21.4 L -6.3 -21.2 M 6.3 -21.2 L 7.6 -21.4 M -0.8 -21.4 L 0.8 -21.4" fill="none" stroke="#3A3A3A" stroke-width="0.9"/>
+          <circle cx="-3.5" cy="-21" r="2.8" fill="#262626" stroke="#4A4A4A"/>
+          <circle cx="3.5" cy="-21" r="2.8" fill="#262626" stroke="#4A4A4A"/>
+          <path d="M -2.1 -15.8 Q 0 -14.3 2.1 -15.8" fill="none" stroke="#6B3F00" stroke-width="0.8" stroke-linecap="round"/>
+          <ellipse cx="0" cy="-26.8" rx="15" ry="2.9" fill="#4A3F38"/>
+          <path d="M -8.6 -27.2 C -9 -33 -6 -36.2 -2 -35.6 C -1 -34.6 1 -34.6 2 -35.6 C 6 -36.2 9 -33 8.6 -27.2 Z" fill="#4A3F38"/>
+          <path d="M -8.7 -29.6 L 8.7 -29.6 L 8.6 -27.2 L -8.6 -27.2 Z" fill="#2A2420"/>
+        </g>
       </defs>
     </svg>
   </figure>
@@ -1186,7 +1206,7 @@
     if (p.kind === "laps") return [{ t: p.end, text: `Ran ${p.laps} laps around the block` }];
     if (p.kind === "grabbed") {
       return [
-        { t: p.agentStart, text: "A man in a trench coat was seen nearby" },
+        { t: p.agentStart, text: "A woman in a fedora was seen nearby" },
         { t: p.start, text: `Grabbed by a secret agent at ${from.phrase}` },
         { t: p.end, text: `Taken to ${to.phrase}` }
       ];
@@ -1254,7 +1274,7 @@
       const stats = [["Currently", p.activity], ["Here since", fmt(s.since)], ["Accuracy", p.accuracy]];
       if (places[s.place].debt) stats.push(["Money Lost", debtText(t)]);
       if (s.stalked) {
-        stats[0] = ["Currently", "Not noticing the man in the trench coat"];
+        stats[0] = ["Currently", "Not noticing the woman in the fedora"];
         return { key: `stalked-${s.stalked.k}`, line: `A secret agent is closing in on ${who}.`, stats };
       }
       return {
@@ -1414,12 +1434,13 @@
   const coRunner = CO ? makeRunner("co-head", -41) : null;   // under Blake, who's the star
   const blake = makeRunner("blake-head", -37);
 
-  // The secret agent who grabs Blake every so often. He keeps AGENT_SIDE
-  // map units to Blake's right so he doesn't cover him.
-  const AGENT_SIDE = 24;
+  // The secret agent who grabs Blake every so often (#agent-fig in the map's
+  // <defs>). She keeps AGENT_SIDE map units to Blake's right so she doesn't
+  // cover him.
+  const AGENT_SIDE = 28;
   const agent = el("g", {}, svg);
-  el("ellipse", { class: "shadow", cx: 0, cy: 0, rx: 10, ry: 3.6 }, agent);
-  const agentFig = el("text", { class: "emoji", x: 0, y: 2, "font-size": 30, "text-anchor": "middle" }, agent, "🕵️");
+  el("ellipse", { class: "shadow", cx: 0, cy: 0, rx: 11, ry: 3.8 }, agent);
+  const agentFig = el("use", { class: "agent-fig", href: "#agent-fig" }, agent);
   agent.style.display = "none";
   const HIDEOUT = PLACES.find(q => q.agent);
 
@@ -1545,7 +1566,7 @@
   }
 
   // Where the agent is: closing in, hauling Blake off, then guarding the
-  // hideout until Blake has escaped. Null when he's off duty.
+  // hideout until Blake has escaped. Null when she's off duty.
   function agentAt(s, t) {
     const p = plan(slotOf(t));
     if (p.kind === "grabbed" && t >= p.agentStart && t < p.start) {
@@ -1572,7 +1593,7 @@
     if (ag) {
       const bob = ag.moving && !still ? -Math.abs(Math.sin(t / 80)) * 3 : 0;
       agent.setAttribute("transform", `translate(${(px(ag.x) + AGENT_SIDE).toFixed(1)},${py(ag.y).toFixed(1)})`);
-      agentFig.setAttribute("y", (2 + bob).toFixed(2));
+      agentFig.setAttribute("transform", `translate(0 ${bob.toFixed(2)})`);
     }
     const crows = !s.moving && !!PLACES[s.place].crows;
     if (crows !== crowsOn) {
